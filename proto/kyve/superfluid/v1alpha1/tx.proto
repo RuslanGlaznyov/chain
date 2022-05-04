@@ -5,4 +5,21 @@ package kyve.superfluid.v1alpha1;
 option go_package = "github.com/KYVENetwork/chain/x/superfluid/types";
 
 // Msg defines the superfluid Msg service.
-service Msg {}
+service Msg {
+  rpc SuperfluidFund(MsgSuperfluidFund) returns (MsgSuperfluidFundResponse);
+}
+
+// MsgSuperfluidFund defines a SDK message for superfluid funding a pool.
+message MsgSuperfluidFund {
+  // creator ...
+  string creator = 1;
+  // pool_id ...
+  uint64 pool_id = 2;
+  // val_addr ...
+  string val_addr = 3;
+  // amount ...
+  uint64 amount = 4;
+}
+
+// MsgSuperfluidFundResponse defines the Msg/SuperfluidFund response type.
+message MsgSuperfluidFundResponse {}
