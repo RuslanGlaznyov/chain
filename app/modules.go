@@ -60,6 +60,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
+	// Superfluid
+	"github.com/KYVENetwork/chain/x/superfluid"
+	superfluidtypes "github.com/KYVENetwork/chain/x/superfluid/types"
+
 	// Upgrade
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 )
@@ -84,6 +88,7 @@ var appModuleBasics = []module.AppModuleBasic{
 	transfer.AppModuleBasic{},
 	vesting.AppModuleBasic{},
 	registry.AppModuleBasic{},
+	superfluid.AppModuleBasic{},
 	// this line is used by starport scaffolding # stargate/app/moduleBasic
 }
 
@@ -97,6 +102,7 @@ var moduleAccountPermissions = map[string][]string{
 	govtypes.ModuleName:            {authtypes.Burner},
 	ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 	registrytypes.ModuleName:       {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+	superfluidtypes.ModuleName:     {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 	// this line is used by starport scaffolding # stargate/app/maccPerms
 }
 

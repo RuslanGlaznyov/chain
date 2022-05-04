@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package kyve.superfluid.v1alpha1;
+
+option go_package = "github.com/KYVENetwork/chain/x/superfluid/types";
+
+// GenesisState defines the superfluid module's genesis state.
+message GenesisState {}

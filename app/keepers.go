@@ -65,6 +65,10 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
+	// Superfluid
+	superfluidkeeper "github.com/KYVENetwork/chain/x/superfluid/keeper"
+	superfluidtypes "github.com/KYVENetwork/chain/x/superfluid/types"
+
 	// Upgrade
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
@@ -91,7 +95,8 @@ type Keepers struct {
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
-	RegistryKeeper registrykeeper.Keeper
+	RegistryKeeper   registrykeeper.Keeper
+	SuperfluidKeeper superfluidkeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 }
 
@@ -132,6 +137,7 @@ func KVStoreKeys() []string {
 		ibctransfertypes.StoreKey,
 		capabilitytypes.StoreKey,
 		registrytypes.StoreKey,
+		superfluidtypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	}
 }

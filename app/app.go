@@ -97,6 +97,9 @@ import (
 	registrymoduleclient "github.com/KYVENetwork/chain/x/registry/client"
 	registrymodulekeeper "github.com/KYVENetwork/chain/x/registry/keeper"
 	registrymoduletypes "github.com/KYVENetwork/chain/x/registry/types"
+	superfluidmodule "github.com/KYVENetwork/chain/x/superfluid"
+	superfluidmodulekeeper "github.com/KYVENetwork/chain/x/superfluid/keeper"
+	superfluidmoduletypes "github.com/KYVENetwork/chain/x/superfluid/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -296,6 +299,17 @@ func New(
 		app.UpgradeKeeper,
 	)
 
+	app.SuperfluidKeeper = *superfluidmodulekeeper.NewKeeper(
+		appCodec,
+		keys[superfluidmoduletypes.StoreKey],
+		keys[superfluidmoduletypes.MemStoreKey],
+
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.RegistryKeeper,
+		app.StakingKeeper,
+	)
+
 	// register the proposal types
 	govRouter := govtypes.NewRouter()
 	govRouter.AddRoute(govtypes.RouterKey, govtypes.ProposalHandler).
@@ -311,6 +325,8 @@ func New(
 	)
 
 	registryModule := registrymodule.NewAppModule(appCodec, app.RegistryKeeper, app.AccountKeeper, app.BankKeeper, app.UpgradeKeeper)
+
+	superfluidModule := superfluidmodule.NewAppModule(appCodec, app.SuperfluidKeeper, app.AccountKeeper, app.BankKeeper, app.RegistryKeeper, app.StakingKeeper)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
@@ -351,6 +367,7 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		registryModule,
+		superfluidModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -377,6 +394,7 @@ func New(
 		feegrant.ModuleName,
 		paramstypes.ModuleName,
 		registrymoduletypes.ModuleName,
+		superfluidmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -399,6 +417,7 @@ func New(
 		ibchost.ModuleName,
 		ibctransfertypes.ModuleName,
 		registrymoduletypes.ModuleName,
+		superfluidmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -426,6 +445,7 @@ func New(
 		ibctransfertypes.ModuleName,
 		feegrant.ModuleName,
 		registrymoduletypes.ModuleName,
+		superfluidmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
