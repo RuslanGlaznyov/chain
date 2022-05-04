@@ -6,6 +6,7 @@ option go_package = "github.com/KYVENetwork/chain/x/superfluid/types";
 
 // Msg defines the superfluid Msg service.
 service Msg {
+  // SuperfluidFund ...
   rpc SuperfluidFund(MsgSuperfluidFund) returns (MsgSuperfluidFundResponse);
 }
 
