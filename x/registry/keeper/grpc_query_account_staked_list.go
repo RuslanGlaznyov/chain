@@ -2,12 +2,12 @@ package keeper
 
 import (
 	"context"
-	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"kyve/x/registry/types"
 )
 
 // AccountStakedList returns all pools (with additional data) a user has staked into.

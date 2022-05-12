@@ -11,14 +11,14 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/KYVENetwork/chain/x/registry/client/cli"
-	"github.com/KYVENetwork/chain/x/registry/keeper"
-	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	"kyve/x/registry/client/cli"
+	"kyve/x/registry/keeper"
+	"kyve/x/registry/types"
 )
 
 var (

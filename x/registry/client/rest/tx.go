@@ -3,28 +3,28 @@ package rest
 import (
 	"net/http"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	govrest "github.com/cosmos/cosmos-sdk/x/gov/client/rest"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	"kyve/x/registry/types"
 )
 
 type CreatePoolRequest struct {
-	BaseReq       rest.BaseReq `json:"base_req" yaml:"base_req"`
-	Title         string       `json:"title" yaml:"title"`
-	Description   string       `json:"description" yaml:"description"`
-	Deposit       sdk.Coins    `json:"deposit" yaml:"deposit"`
-	Name          string       `json:"name" yaml:"name"`
-	Runtime       string       `json:"runtime" yaml:"runtime"`
-	Logo          string       `json:"logo" yaml:"logo"`
-	Versions      string       `json:"versions" yaml:"versions"`
-	Config        string       `json:"config" yaml:"config"`
-	StartHeight   uint64       `json:"startHeight" yaml:"startHeight"`
+	BaseReq        rest.BaseReq `json:"base_req" yaml:"base_req"`
+	Title          string       `json:"title" yaml:"title"`
+	Description    string       `json:"description" yaml:"description"`
+	Deposit        sdk.Coins    `json:"deposit" yaml:"deposit"`
+	Name           string       `json:"name" yaml:"name"`
+	Runtime        string       `json:"runtime" yaml:"runtime"`
+	Logo           string       `json:"logo" yaml:"logo"`
+	Versions       string       `json:"versions" yaml:"versions"`
+	Config         string       `json:"config" yaml:"config"`
+	StartHeight    uint64       `json:"startHeight" yaml:"startHeight"`
 	UploadInterval uint64       `json:"uploadInterval" yaml:"uploadInterval"`
-	OperatingCost uint64       `json:"operatingCost" yaml:"operatingCost"`
+	OperatingCost  uint64       `json:"operatingCost" yaml:"operatingCost"`
 }
 
 func ProposalCreatePoolRESTHandler(clientCtx client.Context) govrest.ProposalRESTHandler {
@@ -66,18 +66,18 @@ func newCreatePoolHandler(clientCtx client.Context) http.HandlerFunc {
 }
 
 type UpdatePoolRequest struct {
-	BaseReq       rest.BaseReq `json:"base_req" yaml:"base_req"`
-	Title         string       `json:"title" yaml:"title"`
-	Description   string       `json:"description" yaml:"description"`
-	Deposit       sdk.Coins    `json:"deposit" yaml:"deposit"`
-	Id            uint64       `json:"id" yaml:"id"`
-	Name          string       `json:"name" yaml:"name"`
-	Runtime       string       `json:"runtime" yaml:"runtime"`
-	Logo          string       `json:"logo" yaml:"logo"`
-	Versions      string       `json:"versions" yaml:"versions"`
-	Config        string       `json:"config" yaml:"config"`
+	BaseReq        rest.BaseReq `json:"base_req" yaml:"base_req"`
+	Title          string       `json:"title" yaml:"title"`
+	Description    string       `json:"description" yaml:"description"`
+	Deposit        sdk.Coins    `json:"deposit" yaml:"deposit"`
+	Id             uint64       `json:"id" yaml:"id"`
+	Name           string       `json:"name" yaml:"name"`
+	Runtime        string       `json:"runtime" yaml:"runtime"`
+	Logo           string       `json:"logo" yaml:"logo"`
+	Versions       string       `json:"versions" yaml:"versions"`
+	Config         string       `json:"config" yaml:"config"`
 	UploadInterval uint64       `json:"uploadInterval" yaml:"uploadInterval"`
-	OperatingCost uint64       `json:"operatingCost" yaml:"operatingCost"`
+	OperatingCost  uint64       `json:"operatingCost" yaml:"operatingCost"`
 }
 
 func ProposalUpdatePoolRESTHandler(clientCtx client.Context) govrest.ProposalRESTHandler {

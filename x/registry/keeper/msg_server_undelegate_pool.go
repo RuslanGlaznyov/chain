@@ -3,9 +3,9 @@ package keeper
 import (
 	"context"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"kyve/x/registry/types"
 )
 
 // UndelegatePool handles the logic of an SDK message that allows undelegation from a protocol node in a specified pool.

@@ -3,9 +3,9 @@ package keeper
 import (
 	"context"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"kyve/x/registry/types"
 )
 
 // UpdateMetadata handles the logic of an SDK message that allows protocol nodes to update their node's metadata.

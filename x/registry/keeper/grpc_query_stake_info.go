@@ -2,8 +2,8 @@ package keeper
 
 import (
 	"context"
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"kyve/x/registry/types"
 	"strconv"
 	"strings"
 

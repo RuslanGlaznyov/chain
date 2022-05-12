@@ -54,8 +54,8 @@ import (
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	// Registry
-	registrykeeper "github.com/KYVENetwork/chain/x/registry/keeper"
-	registrytypes "github.com/KYVENetwork/chain/x/registry/types"
+	registrykeeper "kyve/x/registry/keeper"
+	registrytypes "kyve/x/registry/types"
 
 	// Slashing
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"

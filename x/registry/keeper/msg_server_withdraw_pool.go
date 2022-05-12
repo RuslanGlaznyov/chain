@@ -3,9 +3,9 @@ package keeper
 import (
 	"context"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"kyve/x/registry/types"
 )
 
 // WithdrawPool handles the logic of an SDK message that allows delegators to collect all rewards from a specified pool.

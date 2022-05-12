@@ -3,9 +3,9 @@ package cli
 import (
 	"fmt"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
+	"kyve/x/registry/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

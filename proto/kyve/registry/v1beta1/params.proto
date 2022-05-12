@@ -4,7 +4,7 @@ package kyve.registry.v1beta1;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/KYVENetwork/chain/x/registry/types";
+option go_package = "kyve/x/registry/types";
 
 // Params defines the set of params for the registry module.
 message Params {

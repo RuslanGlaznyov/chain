@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"kyve/x/registry/types"
 )
 
 // HandleUploadTimeout is an end block hook that triggers an upload timeout for every pool (if applicable).

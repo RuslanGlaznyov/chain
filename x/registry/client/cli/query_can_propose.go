@@ -3,11 +3,11 @@ package cli
 import (
 	"strconv"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
+	"kyve/x/registry/types"
 )
 
 var _ = strconv.Itoa(0)

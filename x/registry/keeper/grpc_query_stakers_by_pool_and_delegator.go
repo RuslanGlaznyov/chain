@@ -8,10 +8,10 @@ import (
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"kyve/x/registry/types"
 )
 
 // StakersByPoolAndDelegator makes it possible to see all stakers for a given pool to which the user has delegated to.

@@ -1,8 +1,8 @@
 package keeper
 
 import (
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"kyve/x/registry/types"
 )
 
 // TransferToAddress sends tokens from this module to a specified address.

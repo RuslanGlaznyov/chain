@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/KYVENetwork/chain/x/registry/types"
+	"kyve/x/registry/types"
 )
 
 type msgServer struct {

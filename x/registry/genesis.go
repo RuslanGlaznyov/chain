@@ -1,9 +1,9 @@
 package registry
 
 import (
-	"github.com/KYVENetwork/chain/x/registry/keeper"
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"kyve/x/registry/keeper"
+	"kyve/x/registry/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

@@ -5,10 +5,10 @@ import (
 	"context"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"kyve/x/registry/types"
 )
 
 // AccountAssets returns an overview of the balances of the given user regarding the protocol nodes

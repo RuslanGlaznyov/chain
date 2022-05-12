@@ -1,10 +1,10 @@
 package app
 
 import (
-	v0_1_0 "github.com/KYVENetwork/chain/app/upgrades/v0.1.0"
-	v0_2_0 "github.com/KYVENetwork/chain/app/upgrades/v0.2.0"
-	v0_3_0 "github.com/KYVENetwork/chain/app/upgrades/v0.3.0"
 	"io"
+	v0_1_0 "kyve/app/upgrades/v0.1.0"
+	v0_2_0 "kyve/app/upgrades/v0.2.0"
+	v0_3_0 "kyve/app/upgrades/v0.3.0"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -92,11 +92,11 @@ import (
 	"github.com/ignite-hq/cli/ignite/pkg/cosmoscmd"
 	"github.com/ignite-hq/cli/ignite/pkg/openapiconsole"
 
-	"github.com/KYVENetwork/chain/docs"
-	registrymodule "github.com/KYVENetwork/chain/x/registry"
-	registrymoduleclient "github.com/KYVENetwork/chain/x/registry/client"
-	registrymodulekeeper "github.com/KYVENetwork/chain/x/registry/keeper"
-	registrymoduletypes "github.com/KYVENetwork/chain/x/registry/types"
+	"kyve/docs"
+	registrymodule "kyve/x/registry"
+	registrymoduleclient "kyve/x/registry/client"
+	registrymodulekeeper "kyve/x/registry/keeper"
+	registrymoduletypes "kyve/x/registry/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 

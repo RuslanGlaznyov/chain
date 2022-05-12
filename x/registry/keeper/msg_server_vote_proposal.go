@@ -3,9 +3,9 @@ package keeper
 import (
 	"context"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"kyve/x/registry/types"
 )
 
 // VoteProposal handles the logic of an SDK message that allows protocol nodes to vote on a pool's bundle proposal.
@@ -52,7 +52,7 @@ func (k msgServer) VoteProposal(
 			hasVotedValid = true
 		}
 	}
-	
+
 	for _, voter := range pool.BundleProposal.VotersInvalid {
 		if voter == msg.Creator {
 			hasVotedInvalid = true

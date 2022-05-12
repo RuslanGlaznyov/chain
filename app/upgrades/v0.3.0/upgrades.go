@@ -3,11 +3,11 @@ package v0_3_0
 import (
 	"errors"
 	"fmt"
-	registrykeeper "github.com/KYVENetwork/chain/x/registry/keeper"
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+	registrykeeper "kyve/x/registry/keeper"
+	"kyve/x/registry/types"
 )
 
 func CreateUpgradeHandler(

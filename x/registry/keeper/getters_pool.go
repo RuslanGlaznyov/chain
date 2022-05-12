@@ -3,9 +3,9 @@ package keeper
 import (
 	"encoding/binary"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"kyve/x/registry/types"
 )
 
 // GetPoolCount get the total number of pool

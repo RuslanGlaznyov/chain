@@ -1,9 +1,9 @@
 package keeper
 
 import (
-	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"kyve/x/registry/types"
 )
 
 // SetProposal set a specific proposal in the store from its index

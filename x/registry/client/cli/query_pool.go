@@ -4,11 +4,11 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
+	"kyve/x/registry/types"
 )
 
 func CmdListPool() *cobra.Command {

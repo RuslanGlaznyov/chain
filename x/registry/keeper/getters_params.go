@@ -1,8 +1,8 @@
 package keeper
 
 import (
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"kyve/x/registry/types"
 )
 
 // GetParams get all parameters as types.Params

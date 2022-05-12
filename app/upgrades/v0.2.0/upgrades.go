@@ -5,7 +5,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
-	registrykeeper "github.com/KYVENetwork/chain/x/registry/keeper"
+	registrykeeper "kyve/x/registry/keeper"
 )
 
 func CreateUpgradeHandler(

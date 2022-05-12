@@ -14,7 +14,7 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	// "github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/KYVENetwork/chain/x/registry/types"
+	"kyve/x/registry/types"
 )
 
 var (

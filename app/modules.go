@@ -50,8 +50,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 
 	// Registry
-	"github.com/KYVENetwork/chain/x/registry"
-	registrytypes "github.com/KYVENetwork/chain/x/registry/types"
+	"kyve/x/registry"
+	registrytypes "kyve/x/registry/types"
 
 	// Slashing
 	"github.com/cosmos/cosmos-sdk/x/slashing"

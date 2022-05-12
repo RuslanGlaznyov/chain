@@ -1,9 +1,9 @@
 package client
 
 import (
-	"github.com/KYVENetwork/chain/x/registry/client/cli"
-	"github.com/KYVENetwork/chain/x/registry/client/rest"
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
+	"kyve/x/registry/client/cli"
+	"kyve/x/registry/client/rest"
 )
 
 var CreatePoolHandler = govclient.NewProposalHandler(cli.CmdSubmitCreatePoolProposal, rest.ProposalCreatePoolRESTHandler)

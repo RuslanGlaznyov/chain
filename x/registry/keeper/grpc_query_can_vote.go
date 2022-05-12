@@ -3,11 +3,11 @@ package keeper
 import (
 	"context"
 
-	"github.com/KYVENetwork/chain/x/registry/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"kyve/x/registry/types"
 )
 
 func (k Keeper) CanVote(goCtx context.Context, req *types.QueryCanVoteRequest) (*types.QueryCanVoteResponse, error) {

@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/KYVENetwork/chain/x/registry/types"
+	"kyve/x/registry/types"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"

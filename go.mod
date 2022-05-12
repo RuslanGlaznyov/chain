@@ -1,4 +1,4 @@
-module github.com/KYVENetwork/chain
+module kyve
 
 go 1.16
 
