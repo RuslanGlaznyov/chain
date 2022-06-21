@@ -28,7 +28,7 @@ func emitBundleEvent(ctx sdk.Context, pool *Pool, status string, bundleReward ui
 		sdk.NewAttribute(ProposalEventReward, strconv.FormatUint(bundleReward, 10)),
 		sdk.NewAttribute(ProposalEventValid, strconv.FormatUint(uint64(len(pool.BundleProposal.VotersValid)), 10)),
 		sdk.NewAttribute(ProposalEventInvalid, strconv.FormatUint(uint64(len(pool.BundleProposal.VotersInvalid)), 10)),
-		sdk.NewAttribute(ProposalEventFromHeight, strconv.FormatUint(pool.BundleProposal.FromHeight, 10)),
+		sdk.NewAttribute(ProposalEventFromHeight, strconv.FormatUint(pool.CurrentHeight, 10)),
 		sdk.NewAttribute(ProposalEventToHeight, strconv.FormatUint(pool.BundleProposal.ToHeight, 10)),
 		sdk.NewAttribute(ProposalEventStatus, status),
 	)
