@@ -117,7 +117,7 @@ genesis:
             scheduled_at: "0"
             duration: "0",
             
-          start_key: "2000",
+          start_key: "0",
           current_key: "",
           current_value: ""
         }
