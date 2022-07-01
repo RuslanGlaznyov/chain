@@ -6,7 +6,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 )
 
 func migratePools(registryKeeper *registrykeeper.Keeper, ctx sdk.Context) {
@@ -81,8 +80,4 @@ func CreateUpgradeHandler(
 		// Return.
 		return vm, nil
 	}
-}
-
-func equalTraces(dtA, dtB ibctransfertypes.DenomTrace) bool {
-	return dtA.BaseDenom == dtB.BaseDenom && dtA.Path == dtB.Path
 }
