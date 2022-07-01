@@ -54,6 +54,11 @@ func NewKeeper(
 	}
 }
 
+func (k Keeper) SetMissingKeepers(distrKeeper types.DistrKeeper, upgradeKeeper types.UpgradeKeeper) {
+	k.distrKeeper = distrKeeper
+	k.upgradeKeeper = upgradeKeeper
+}
+
 func (k Keeper) StoreKey() sdk.StoreKey {
 	return k.storeKey
 }
