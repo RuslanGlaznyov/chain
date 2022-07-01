@@ -239,8 +239,21 @@ func New(
 	app.BankKeeper = bankkeeper.NewBaseKeeper(
 		appCodec, keys[banktypes.StoreKey], app.AccountKeeper, app.GetSubspace(banktypes.ModuleName), app.ModuleAccountAddrs(),
 	)
+
+	app.RegistryKeeper = *registrymodulekeeper.NewKeeper(
+		appCodec,
+		keys[registrymoduletypes.StoreKey],
+		keys[registrymoduletypes.MemStoreKey],
+		app.GetSubspace(registrymoduletypes.ModuleName),
+
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.DistrKeeper,
+		app.UpgradeKeeper,
+	)
+
 	stakingKeeper := stakingkeeper.NewKeeper(
-		appCodec, keys[stakingtypes.StoreKey], app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName),
+		appCodec, keys[stakingtypes.StoreKey], app.AccountKeeper, app.BankKeeper, app.RegistryKeeper, app.GetSubspace(stakingtypes.ModuleName),
 	)
 	app.MintKeeper = mintkeeper.NewKeeper(
 		appCodec, keys[minttypes.StoreKey], app.GetSubspace(minttypes.ModuleName), &stakingKeeper,
@@ -288,18 +301,6 @@ func New(
 	)
 	// If evidence needs to be handled for the app, set routes in router here and seal
 	app.EvidenceKeeper = *evidenceKeeper
-
-	app.RegistryKeeper = *registrymodulekeeper.NewKeeper(
-		appCodec,
-		keys[registrymoduletypes.StoreKey],
-		keys[registrymoduletypes.MemStoreKey],
-		app.GetSubspace(registrymoduletypes.ModuleName),
-
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.DistrKeeper,
-		app.UpgradeKeeper,
-	)
 
 	// register the proposal types
 	govRouter := govtypes.NewRouter()
