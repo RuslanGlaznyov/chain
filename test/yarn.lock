@@ -926,6 +926,27 @@
     humanize-number "0.0.2"
     qs "^6.10.5"
 
+"@kyve/sdk@https://github.com/KYVENetwork/sdk.git#feature/v2":
+  version "2.0.0"
+  uid b6182c57f44c0109e1f13acfa8fae6f4dd95770d
+  resolved "https://github.com/KYVENetwork/sdk.git#b6182c57f44c0109e1f13acfa8fae6f4dd95770d"
+  dependencies:
+    "@cosmjs/amino" "0.28.3"
+    "@cosmjs/crypto" "0.27.1"
+    "@cosmjs/encoding" "0.27.1"
+    "@cosmjs/launchpad" "^0.27.1"
+    "@cosmjs/proto-signing" "0.28.0"
+    "@cosmjs/stargate" "0.28.0"
+    "@cosmjs/tendermint-rpc" "0.28.0"
+    "@cosmostation/extension-client" "^0.0.6"
+    "@keplr-wallet/cosmos" "0.9.16"
+    "@kyve/proto" "git+ssh://git@github.com:KYVENetwork/proto.git#v0.5.0"
+    axios "0.25.0"
+    bech32 "2.0.0"
+    bignumber.js "9.0.2"
+    humanize-number "0.0.2"
+    qs "^6.10.5"
+
 "@noble/hashes@^1", "@noble/hashes@^1.0.0":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.1.2.tgz#e9e035b9b166ca0af657a7848eb2718f0f22f183"
