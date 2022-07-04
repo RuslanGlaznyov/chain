@@ -13,9 +13,6 @@ accounts:
   - name: faucet
     coins: ["1000000000000000000tkyve"]
     mnemonic: "open home share route party lake room solution quantum pact model avocado humor dilemma review desert turtle total humor produce rate keen eagle fee"
-client:
-  openapi:
-    path: "docs/static/openapi.yml"
 faucet:
   name: faucet
   coins: ["1000000000000000tkyve"]
