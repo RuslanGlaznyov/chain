@@ -35,7 +35,7 @@ to the other environment variables in `/etc/systemd/system/kyved.service` and re
 ```shell
 sudo systemctl daemon-reload
 ```
-Remember to remove this line once it's processed if you want to keep the update option enabled.
+Remember to remove this line once it's processed if you want to keep the backup option enabled.
 
 Then start cosmovisor:
 ```shell
@@ -47,7 +47,7 @@ sudo journalctl -u kyved -f
 ```
 and see if the upgrade passes successfully (i.e. the chain does not crash).
 
-We will wait until `5th June 2022 - 10:00 UTC` until we start the validators again, to give everybody time to perform the upgrade.
+We will wait until `5th June 2022 - 12:00 UTC` until we start the validators again, to give everybody time to perform the upgrade.
 
 
 
