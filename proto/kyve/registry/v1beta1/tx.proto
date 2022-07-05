@@ -166,6 +166,8 @@ message MsgSubmitBundleProposal {
   string to_key = 8;
   // to_value ...
   string to_value = 9;
+  // bundle_hash ...
+  string bundle_hash = 10;
 }
 
 // MsgSubmitBundleProposalResponse defines the Msg/SubmitBundleProposal response type.

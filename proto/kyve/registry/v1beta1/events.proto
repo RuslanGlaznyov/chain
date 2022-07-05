@@ -69,6 +69,8 @@ message EventBundleFinalised {
   string to_value = 13;
   // id ...
   uint64 id = 14;
+  // bundle_hash ...
+  string bundle_hash = 15;
 }
 
 // EventBundleVote is an event emitted when a protocol node votes on a bundle.

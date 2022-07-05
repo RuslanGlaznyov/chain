@@ -118,6 +118,11 @@ func (k msgServer) SubmitBundleProposal(
 		if msg.ToKey != "" || msg.ToValue != "" {
 			return nil, types.ErrInvalidArgs
 		}
+
+		// Validate bundle hash
+		if msg.BundleHash != "" {
+			return nil, types.ErrInvalidArgs
+		}
 	} else {
 		if msg.ToHeight <= current_height || msg.ByteSize == 0 {
 			return nil, types.ErrInvalidArgs
@@ -125,6 +130,11 @@ func (k msgServer) SubmitBundleProposal(
 
 		// Validate key values
 		if msg.ToKey == "" || msg.ToValue == "" {
+			return nil, types.ErrInvalidArgs
+		}
+
+		// Validate bundle hash
+		if msg.BundleHash == "" {
 			return nil, types.ErrInvalidArgs
 		}
 	}
@@ -140,6 +150,7 @@ func (k msgServer) SubmitBundleProposal(
 			CreatedAt:    uint64(ctx.BlockTime().Unix()),
 			ToKey:        msg.ToKey,
 			ToValue:      msg.ToValue,
+			BundleHash: msg.BundleHash,
 		}
 
 		k.SetPool(ctx, pool)
@@ -265,6 +276,7 @@ func (k msgServer) SubmitBundleProposal(
 					VotersInvalid: pool.BundleProposal.VotersInvalid,
 					ToKey:         pool.BundleProposal.ToKey,
 					ToValue:       pool.BundleProposal.ToValue,
+					BundleHash: pool.BundleProposal.BundleHash,
 				}
 
 				k.SetPool(ctx, pool)
@@ -285,6 +297,7 @@ func (k msgServer) SubmitBundleProposal(
 					ToKey:        pool.BundleProposal.ToKey,
 					ToValue:      pool.BundleProposal.ToValue,
 					Id:           0,
+					BundleHash: pool.BundleProposal.BundleHash,
 				})
 				if errEmit != nil {
 					return nil, errEmit
@@ -363,6 +376,7 @@ func (k msgServer) SubmitBundleProposal(
 			FinalizedAt: uint64(ctx.BlockHeight()),
 			Key:         pool.BundleProposal.ToKey,
 			Value:       pool.BundleProposal.ToValue,
+			BundleHash: pool.BundleProposal.BundleHash,
 		})
 
 		// Finalise the proposal, saving useful information.
@@ -390,6 +404,7 @@ func (k msgServer) SubmitBundleProposal(
 			ToKey:        pool.BundleProposal.ToKey,
 			ToValue:      pool.BundleProposal.ToValue,
 			Id:           pool.TotalBundles - 1,
+			BundleHash: pool.BundleProposal.BundleHash,
 		})
 		if errEmit != nil {
 			return nil, errEmit
@@ -405,6 +420,7 @@ func (k msgServer) SubmitBundleProposal(
 			CreatedAt:    uint64(ctx.BlockTime().Unix()),
 			ToKey:        msg.ToKey,
 			ToValue:      msg.ToValue,
+			BundleHash: msg.BundleHash,
 		}
 
 		k.SetPool(ctx, pool)
@@ -459,6 +475,7 @@ func (k msgServer) SubmitBundleProposal(
 			ToKey:        pool.BundleProposal.ToKey,
 			ToValue:      pool.BundleProposal.ToValue,
 			Id:           0,
+			BundleHash: pool.BundleProposal.BundleHash,
 		})
 		if errEmit != nil {
 			return nil, errEmit
