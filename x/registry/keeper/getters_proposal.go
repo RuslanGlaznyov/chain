@@ -120,14 +120,19 @@ func (k Keeper) UpgradeHelperV060MigrateSecondIndex(ctx sdk.Context) {
 		keysToDelete = append(keysToDelete, iterator.Key())
 	}
 
+	println("Delete ", len(keysToDelete), " index keys")
+
 	for _, key := range keysToDelete {
 		store.Delete(key)
 	}
 
 	storeIndex := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex2)
+	var counter uint64 = 0
 	for _, proposal := range k.GetAllProposal(ctx) {
+		counter++
 		// Insert bundle id for second index
 		storeIndex.Set(types.ProposalKeyIndex2(proposal.PoolId, proposal.Id), []byte(proposal.StorageId))
 	}
+	println("Created ", counter, " index keys")
 
 }
