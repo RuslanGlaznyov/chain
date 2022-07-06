@@ -127,6 +127,9 @@ var (
 	UnbondingDelegationQueueEntryKeyPrefix = []byte{12}
 	// UnbondingDelegationQueueEntryKeyPrefixIndex2 ...
 	UnbondingDelegationQueueEntryKeyPrefixIndex2 = []byte{13}
+
+	// RedelegationCooldownPrefix ...
+	RedelegationCooldownPrefix = []byte{14}
 )
 
 // StakerKey returns the store Key to retrieve a Staker from the index fields
@@ -196,6 +199,10 @@ func UnbondingDelegationQueueEntryKey(index uint64) []byte {
 }
 func UnbondingDelegationQueueEntryKeyIndex2(delegator string, index uint64) []byte {
 	return KeyPrefixBuilder{}.AString(delegator).AInt(index).Key
+}
+
+func RedelegationCooldownKey(delegator string, block uint64) []byte {
+	return KeyPrefixBuilder{}.AString(delegator).AInt(block).Key
 }
 
 type KeyPrefixBuilder struct {
