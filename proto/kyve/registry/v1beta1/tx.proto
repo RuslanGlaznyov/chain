@@ -30,6 +30,8 @@ service Msg {
   rpc WithdrawPool(MsgWithdrawPool) returns (MsgWithdrawPoolResponse);
   // UndelegatePool ...
   rpc UndelegatePool(MsgUndelegatePool) returns (MsgUndelegatePoolResponse);
+  // RedelegatePool ...
+  rpc RedelegatePool(MsgRedelegatePool) returns (MsgRedelegatePoolResponse);
 
   // POOL Query for protocol nodes
 
@@ -143,6 +145,26 @@ message MsgUndelegatePool {
 
 // MsgUndelegatePoolResponse defines the Msg/UndelegatePool response type.
 message MsgUndelegatePoolResponse {}
+
+// MsgRedelegatePool defines a SDK message for redelegating from a
+// staker in a pool to another staker in the same or another pool
+message MsgRedelegatePool {
+  // creator ...
+  string creator = 1;
+  // id ...
+  uint64 from_pool_id = 2;
+  // staker ...
+  string from_staker = 3;
+  // id ...
+  uint64 to_pool_id = 4;
+  // staker ...
+  string to_staker = 5;
+  // amount ...
+  uint64 amount = 6;
+}
+
+// MsgUndelegatePoolResponse defines the Msg/UndelegatePool response type.
+message MsgRedelegatePoolResponse {}
 
 // POOL
 
