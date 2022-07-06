@@ -19,6 +19,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgDelegatePool{}, "registry/DelegatePool", nil)
 	cdc.RegisterConcrete(&MsgWithdrawPool{}, "registry/WithdrawPool", nil)
 	cdc.RegisterConcrete(&MsgUndelegatePool{}, "registry/UndelegatePool", nil)
+	cdc.RegisterConcrete(&MsgRedelegatePool{}, "registry/RedelegatePool", nil)
 	cdc.RegisterConcrete(&MsgUpdateMetadata{}, "registry/UpdateMetadata", nil)
 	// this line is used by starport scaffolding # 2
 	cdc.RegisterConcrete(&CreatePoolProposal{}, "kyve/CreatePoolProposal", nil)
@@ -60,6 +61,9 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUndelegatePool{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgRedelegatePool{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateMetadata{},
