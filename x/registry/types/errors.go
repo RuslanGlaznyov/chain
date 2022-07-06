@@ -50,6 +50,8 @@ var (
 
 // delegation errors
 var (
-	ErrNotADelegator       = sdkerrors.Register(ModuleName, 1125, "not a delegator")
-	ErrNotEnoughDelegation = sdkerrors.Register(ModuleName, 1126, "undelegate-amount is larger than current delegation")
+	ErrNotADelegator                   = sdkerrors.Register(ModuleName, 1125, "not a delegator")
+	ErrNotEnoughDelegation             = sdkerrors.Register(ModuleName, 1126, "undelegate-amount is larger than current delegation")
+	ErrRedelegationOnCooldown          = sdkerrors.Register(ModuleName, 1127, "all redelegation slots are on cooldown")
+	ErrMultipleRedelegationInSameBlock = sdkerrors.Register(ModuleName, 1128, "only one redelegation per delegator per block")
 )

@@ -123,6 +123,11 @@ service Query {
     option (google.api.http).get = "/kyve/registry/v1beta1/account_delegation_list/{address}";
   }
 
+  // AccountRedelegation ...
+  rpc AccountRedelegation(QueryAccountRedelegationRequest) returns (QueryAccountRedelegationResponse) {
+    option (google.api.http).get = "/kyve/registry/v1beta1/account_redelegation/{address}";
+  }
+
   // DELEGATION
 
   // Delegator returns all delegation info
@@ -562,6 +567,18 @@ message DelegatorResponse {
   string staker = 5;
   // delegation_pool_data ...
   kyve.registry.v1beta1.DelegationPoolData delegation_pool_data = 6;
+}
+
+// QueryAccountDelegationListRequest ...
+message QueryAccountRedelegationRequest {
+  // address ...
+  string address = 1;
+}
+
+// QueryAccountDelegationListRequest is the response type for the Query/AccountDelegationList RPC method.
+message QueryAccountRedelegationResponse {
+  // redelegation_cooldown_entries ...
+  repeated uint64 redelegation_cooldown_entries = 1 [(gogoproto.nullable) = false];
 }
 
 // ######################

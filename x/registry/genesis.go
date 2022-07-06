@@ -59,6 +59,10 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		k.SetUnbondingDelegationQueueEntry(ctx, elem)
 	}
 
+	for _, elem := range genState.RedelegationCooldownList {
+		k.SetRedelegationCooldown(ctx, elem)
+	}
+
 	k.SetParams(ctx, genState.Params)
 }
 
@@ -80,6 +84,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.UnbondingStakerList = k.GetAllUnbondingStakers(ctx)
 	genesis.UnbondingDelegationQueueState = k.GetUnbondingDelegationQueueState(ctx)
 	genesis.UnbondingDelegationQueueEntries = k.GetAllUnbondingDelegationQueueEntries(ctx)
+	genesis.RedelegationCooldownList = k.GetAllRedelegationCooldownEntries(ctx)
 
 	return genesis
 }

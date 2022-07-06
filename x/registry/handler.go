@@ -47,6 +47,9 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgUndelegatePool:
 			res, err := msgServer.UndelegatePool(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgRedelegatePool:
+			res, err := msgServer.RedelegatePool(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 		case *types.MsgUpdateMetadata:
 			res, err := msgServer.UpdateMetadata(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
