@@ -55,7 +55,7 @@ service Query {
 
   // Proposal ...
   rpc Proposal(QueryProposalRequest) returns (QueryProposalResponse) {
-    option (google.api.http).get = "/kyve/registry/v1beta1/proposal/{bundle_id}";
+    option (google.api.http).get = "/kyve/registry/v1beta1/proposal/{storage_id}";
   }
 
   // Proposals ...
@@ -83,7 +83,7 @@ service Query {
 
   // CanVote checks if voter on pool can still vote for the given bundle
   rpc CanVote(QueryCanVoteRequest) returns (QueryCanVoteResponse) {
-    option (google.api.http).get = "/kyve/registry/v1beta1/can_vote/{pool_id}/{voter}/{bundle_id}";
+    option (google.api.http).get = "/kyve/registry/v1beta1/can_vote/{pool_id}/{voter}/{storage_id}";
   }
 
   // StakeInfo returns necessary information to become a staker (used by the protocol nodes)
@@ -276,8 +276,8 @@ message StakerResponse {
 
 // QueryProposalRequest is the request type for the Query/Proposal RPC method.
 message QueryProposalRequest {
-  // bundle_id ...
-  string bundle_id = 1;
+  // storage_id ...
+  string storage_id = 1;
 }
 
 // QueryProposalResponse is the response type for the Query/Proposal RPC method.
@@ -360,8 +360,8 @@ message QueryCanVoteRequest {
   uint64 pool_id = 1;
   // voter ...
   string voter = 2;
-  // bundle_id ...
-  string bundle_id = 3;
+  // storage_id ...
+  string storage_id = 3;
 }
 
 // QueryCanVoteResponse is the response type for the Query/CanVote RPC method.

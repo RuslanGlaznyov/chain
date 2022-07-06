@@ -41,7 +41,7 @@ const (
 // voting
 const (
 	VoteEventKey      = "Voted"
-	VoteEventBundleId = "BundleId"
+	VoteEventStorageId = "StorageId"
 	VoteEventVote     = "Vote"
 )
 
@@ -54,7 +54,7 @@ const (
 // Activity
 const (
 	ProposalEventKey          = "ProposalEnded"
-	ProposalEventBundleId     = "BundleId"
+	ProposalEventStorageId    = "StorageId"
 	ProposalEventByteSize     = "ByteSize"
 	ProposalEventUploader     = "Uploader"
 	ProposalEventNextUploader = "NextUploader"
@@ -164,8 +164,8 @@ func DelegationPoolDataKey(poolId uint64, stakerAddress string) []byte {
 // === PROPOSALS ===
 
 // ProposalKey returns the store Key to retrieve a Proposal from the index fields
-func ProposalKey(bundleId string) []byte {
-	return KeyPrefixBuilder{}.AString(bundleId).Key
+func ProposalKey(storageId string) []byte {
+	return KeyPrefixBuilder{}.AString(storageId).Key
 }
 
 // ProposalKeyIndex2 ...

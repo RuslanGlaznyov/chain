@@ -43,8 +43,8 @@ enum SlashType {
 message EventBundleFinalised {
   // pool_id is the unique ID of the pool.
   uint64 pool_id = 1;
-  // bundle_id ...
-  string bundle_id = 2;
+  // storage_id ...
+  string storage_id = 2;
   // byte_size ...
   uint64 byte_size = 3;
   // uploader ...
@@ -79,8 +79,8 @@ message EventBundleVote {
   uint64 pool_id = 1;
   // address is the account address of the protocol node.
   string address = 2;
-  // bundle_id is the unique ID of the bundle.
-  string bundle_id = 3;
+  // storage_id is the unique ID of the bundle.
+  string storage_id = 3;
   // vote is the vote type of the protocol node.
   VoteType vote = 4;
 }

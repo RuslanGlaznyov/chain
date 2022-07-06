@@ -313,3 +313,51 @@ func newCancelPoolUpgradeHandler(clientCtx client.Context) http.HandlerFunc {
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
 	}
 }
+
+type ResetPoolRequest struct {
+	BaseReq     rest.BaseReq `json:"base_req" yaml:"base_req"`
+	Title       string       `json:"title" yaml:"title"`
+	Description string       `json:"description" yaml:"description"`
+	IsExpedited bool         `json:"is_expedited" yaml:"is_expedited"`
+	Deposit     sdk.Coins    `json:"deposit" yaml:"deposit"`
+	Id     uint64       `json:"id" yaml:"id"`
+	BundleId     uint64       `json:"bundleId" yaml:"bundleId"`
+}
+
+func ProposalResetPoolRESTHandler(clientCtx client.Context) govrest.ProposalRESTHandler {
+	return govrest.ProposalRESTHandler{
+		SubRoute: "cancel-pool-upgrade",
+		Handler:  newCancelPoolUpgradeHandler(clientCtx),
+	}
+}
+
+func newResetPoolHandler(clientCtx client.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req ResetPoolRequest
+
+		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
+			return
+		}
+
+		req.BaseReq = req.BaseReq.Sanitize()
+		if !req.BaseReq.ValidateBasic(w) {
+			return
+		}
+
+		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
+		if rest.CheckBadRequestError(w, err) {
+			return
+		}
+
+		content := types.NewResetPoolProposal(req.Title, req.Description, req.Id, req.BundleId)
+		msg, err := govtypes.NewMsgSubmitProposal(content, req.Deposit, fromAddr, req.IsExpedited)
+		if rest.CheckBadRequestError(w, err) {
+			return
+		}
+		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
+			return
+		}
+
+		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
+	}
+}

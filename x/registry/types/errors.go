@@ -29,7 +29,7 @@ var (
 	ErrPoolPaused             = sdkerrors.Register(ModuleName, 1106, "pool is paused")
 	ErrInvalidArgs            = sdkerrors.Register(ModuleName, 1107, "invalid args")
 	ErrUploadInterval          = sdkerrors.Register(ModuleName, 1108, "upload interval not surpassed")
-	ErrInvalidBundleId        = sdkerrors.Register(ModuleName, 1109, "current bundleId %v does not match provided bundleId")
+	ErrInvalidStorageId        = sdkerrors.Register(ModuleName, 1109, "current storageId %v does not match provided storageId")
 	ErrAlreadyVoted           = sdkerrors.Register(ModuleName, 1110, "already voted on proposal %v")
 	ErrQuorumNotReached       = sdkerrors.Register(ModuleName, 1111, "quorum not reached")
 	ErrVoterIsUploader        = sdkerrors.Register(ModuleName, 1112, "voter is uploader")

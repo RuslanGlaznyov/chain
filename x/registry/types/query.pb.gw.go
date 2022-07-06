@@ -412,15 +412,15 @@ func request_Query_Proposal_0(ctx context.Context, marshaler runtime.Marshaler, 
 		_   = err
 	)
 
-	val, ok = pathParams["bundle_id"]
+	val, ok = pathParams["storage_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "bundle_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "storage_id")
 	}
 
-	protoReq.BundleId, err = runtime.String(val)
+	protoReq.StorageId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "bundle_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "storage_id", err)
 	}
 
 	msg, err := client.Proposal(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -439,15 +439,15 @@ func local_request_Query_Proposal_0(ctx context.Context, marshaler runtime.Marsh
 		_   = err
 	)
 
-	val, ok = pathParams["bundle_id"]
+	val, ok = pathParams["storage_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "bundle_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "storage_id")
 	}
 
-	protoReq.BundleId, err = runtime.String(val)
+	protoReq.StorageId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "bundle_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "storage_id", err)
 	}
 
 	msg, err := server.Proposal(ctx, &protoReq)
@@ -828,15 +828,15 @@ func request_Query_CanVote_0(ctx context.Context, marshaler runtime.Marshaler, c
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "voter", err)
 	}
 
-	val, ok = pathParams["bundle_id"]
+	val, ok = pathParams["storage_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "bundle_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "storage_id")
 	}
 
-	protoReq.BundleId, err = runtime.String(val)
+	protoReq.StorageId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "bundle_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "storage_id", err)
 	}
 
 	msg, err := client.CanVote(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -877,15 +877,15 @@ func local_request_Query_CanVote_0(ctx context.Context, marshaler runtime.Marsha
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "voter", err)
 	}
 
-	val, ok = pathParams["bundle_id"]
+	val, ok = pathParams["storage_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "bundle_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "storage_id")
 	}
 
-	protoReq.BundleId, err = runtime.String(val)
+	protoReq.StorageId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "bundle_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "storage_id", err)
 	}
 
 	msg, err := server.CanVote(ctx, &protoReq)
@@ -2723,7 +2723,7 @@ var (
 
 	pattern_Query_Staker_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 3}, []string{"kyve", "registry", "v1beta1", "staker", "pool_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Proposal_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"kyve", "registry", "v1beta1", "proposal", "bundle_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Proposal_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"kyve", "registry", "v1beta1", "proposal", "storage_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_Proposals_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"kyve", "registry", "v1beta1", "proposals", "pool_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
@@ -2733,7 +2733,7 @@ var (
 
 	pattern_Query_CanPropose_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"kyve", "registry", "v1beta1", "can_propose", "pool_id", "proposer", "from_height"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_CanVote_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"kyve", "registry", "v1beta1", "can_vote", "pool_id", "voter", "bundle_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_CanVote_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"kyve", "registry", "v1beta1", "can_vote", "pool_id", "voter", "storage_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_StakeInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"kyve", "registry", "v1beta1", "stake_info", "pool_id", "staker"}, "", runtime.AssumeColonVerbOpt(true)))
 

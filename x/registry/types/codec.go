@@ -27,6 +27,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&UnpausePoolProposal{}, "kyve/UnpausePoolProposal", nil)
 	cdc.RegisterConcrete(&SchedulePoolUpgradeProposal{}, "kyve/SchedulePoolUpgradeProposal", nil)
 	cdc.RegisterConcrete(&CancelPoolUpgradeProposal{}, "kyve/CancelPoolUpgradeProposal", nil)
+	cdc.RegisterConcrete(&ResetPoolProposal{}, "kyve/ResetPoolProposal", nil)
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -72,6 +73,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&UnpausePoolProposal{},
 		&SchedulePoolUpgradeProposal{},
 		&CancelPoolUpgradeProposal{},
+		&ResetPoolProposal{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)

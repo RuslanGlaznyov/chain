@@ -94,7 +94,7 @@ genesis:
           bundle_proposal:
             uploader: ""
             next_uploader: ""
-            bundle_id: ""
+            storage_id: ""
             byte_size: "0"
             from_height: "0"
             to_height: "0"

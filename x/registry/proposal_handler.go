@@ -23,6 +23,8 @@ func NewRegistryProposalHandler(k keeper.Keeper) govtypes.Handler {
 			return handleSchedulePoolUpgradeProposal(ctx, k, c)
 		case *types.CancelPoolUpgradeProposal:
 			return handleCancelPoolUpgradeProposal(ctx, k, c)
+		case *types.ResetPoolProposal:
+			return handleResetPoolProposal(ctx, k, c)
 
 		default:
 			return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized registry proposal content type: %T", c)
@@ -173,6 +175,21 @@ func handleCancelPoolUpgradeProposal(ctx sdk.Context, k keeper.Keeper, p *types.
 		// Update the pool
 		k.SetPool(ctx, pool)
 	}
+
+	return nil
+}
+
+func handleResetPoolProposal(ctx sdk.Context, k keeper.Keeper, p *types.ResetPoolProposal) error {
+	// Attempt to fetch the pool, throw an error if not found.
+	pool, found := k.GetPool(ctx, p.Id)
+	if !found {
+		return sdkerrors.Wrapf(sdkerrors.ErrNotFound, types.ErrPoolNotFound.Error(), p.Id)
+	}
+
+	// get all proposals equal or bigger than bundleId
+
+	// Update the pool
+	k.SetPool(ctx, pool)
 
 	return nil
 }

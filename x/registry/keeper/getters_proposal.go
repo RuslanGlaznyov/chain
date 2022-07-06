@@ -11,24 +11,24 @@ func (k Keeper) SetProposal(ctx sdk.Context, proposal types.Proposal) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProposalKeyPrefix))
 	b := k.cdc.MustMarshal(&proposal)
 	store.Set(types.ProposalKey(
-		proposal.BundleId,
+		proposal.StorageId,
 	), b)
 
 	// Insert bundle id for second index
 	storeIndex := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex2)
-	storeIndex.Set(types.ProposalKeyIndex2(proposal.PoolId, proposal.FromHeight), []byte(proposal.BundleId))
+	storeIndex.Set(types.ProposalKeyIndex2(proposal.PoolId, proposal.FromHeight), []byte(proposal.StorageId))
 
 	// Insert bundle id for second index
 	storeIndex3 := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex3)
-	storeIndex3.Set(types.ProposalKeyIndex3(proposal.PoolId, proposal.FinalizedAt), []byte(proposal.BundleId))
+	storeIndex3.Set(types.ProposalKeyIndex3(proposal.PoolId, proposal.FinalizedAt), []byte(proposal.StorageId))
 }
 
 // GetProposal returns a proposal from its index
-func (k Keeper) GetProposal(ctx sdk.Context, bundleId string) (val types.Proposal, found bool) {
+func (k Keeper) GetProposal(ctx sdk.Context, storageId string) (val types.Proposal, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProposalKeyPrefix))
 
 	b := store.Get(types.ProposalKey(
-		bundleId,
+		storageId,
 	))
 	if b == nil {
 		return val, false
@@ -41,7 +41,7 @@ func (k Keeper) GetProposal(ctx sdk.Context, bundleId string) (val types.Proposa
 // RemoveProposal removes a proposal from the store
 func (k Keeper) RemoveProposal(ctx sdk.Context, proposal types.Proposal) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProposalKeyPrefix))
-	store.Delete(types.ProposalKey(proposal.BundleId))
+	store.Delete(types.ProposalKey(proposal.StorageId))
 
 	indexStore2 := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex2)
 	indexStore2.Delete(types.ProposalKeyIndex2(proposal.PoolId, proposal.FromHeight))
