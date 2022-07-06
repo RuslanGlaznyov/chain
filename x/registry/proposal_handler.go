@@ -186,8 +186,41 @@ func handleResetPoolProposal(ctx sdk.Context, k keeper.Keeper, p *types.ResetPoo
 		return sdkerrors.Wrapf(sdkerrors.ErrNotFound, types.ErrPoolNotFound.Error(), p.Id)
 	}
 
-	proposalsToDelete := k.GetProposalsByPoolIdSinceBundleId(ctx, p.Id, p.BundleId)
-	_ = proposalsToDelete
+	// Check if proposal can be found with bundle id
+	_, foundProposal := k.GetProposalByPoolIdAndBundleId(ctx, p.Id, p.BundleId)
+	if !foundProposal {
+		return sdkerrors.Wrapf(sdkerrors.ErrNotFound, types.ErrProposalNotFound.Error(), p.Id, p.BundleId)
+	}
+	
+	// Delete all proposals created after reset proposal
+	for _, proposal := range k.GetProposalsByPoolIdSinceBundleId(ctx, p.Id, p.BundleId) {
+		k.RemoveProposal(ctx, proposal)
+	}
+
+	// Reset pool to latest bundle
+	if p.BundleId == 0 {
+		// if reset pool id is zero reset pool to "genesis state"
+		pool.CurrentKey = ""
+		pool.CurrentValue = ""
+		pool.BundleProposal = &types.BundleProposal{
+			NextUploader: pool.BundleProposal.NextUploader,
+			CreatedAt: uint64(ctx.BlockTime().Unix()),
+		}
+	} else {
+		// Check if reset proposal can be found with bundle id
+		resetProposal, foundResetProposal := k.GetProposalByPoolIdAndBundleId(ctx, p.Id, p.BundleId - 1)
+		if !foundResetProposal {
+			return sdkerrors.Wrapf(sdkerrors.ErrNotFound, types.ErrProposalNotFound.Error(), p.Id, p.BundleId - 1)
+		}
+
+		// reset pool to previous valid bundle
+		pool.CurrentKey = resetProposal.Key
+		pool.CurrentValue = resetProposal.Value
+		pool.BundleProposal = &types.BundleProposal{
+			NextUploader: pool.BundleProposal.NextUploader,
+			CreatedAt: uint64(ctx.BlockTime().Unix()),
+		}
+	}
 
 	// Update the pool
 	k.SetPool(ctx, pool)

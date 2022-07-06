@@ -45,6 +45,7 @@ var (
 	ErrPoolNoUpgradeScheduled   = sdkerrors.Register(ModuleName, 1122, "pool has no scheduled upgrade")
 	ErrToHeight   = sdkerrors.Register(ModuleName, 1123, "invalid to height")
 	ErrFromKey   = sdkerrors.Register(ModuleName, 1124, "invalid from key")
+	ErrProposalNotFound = sdkerrors.Register(ModuleName, 1100, "proposal with pool id %v and bundle id %v does not exist")
 )
 
 // delegation errors
