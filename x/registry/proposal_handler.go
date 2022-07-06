@@ -42,14 +42,14 @@ func handleCreatePoolProposal(ctx sdk.Context, k keeper.Keeper, p *types.CreateP
 		UploadInterval: p.UploadInterval,
 		OperatingCost:  p.OperatingCost,
 		BundleProposal: &types.BundleProposal{},
-		MaxBundleSize: p.MaxBundleSize,
+		MaxBundleSize:  p.MaxBundleSize,
 		Protocol: &types.Protocol{
-			Version: p.Version,
+			Version:     p.Version,
 			LastUpgrade: uint64(ctx.BlockTime().Unix()),
-			Binaries: p.Binaries,
+			Binaries:    p.Binaries,
 		},
 		UpgradePlan: &types.UpgradePlan{},
-		StartKey: p.StartKey,
+		StartKey:    p.StartKey,
 	}
 
 	k.AppendPool(ctx, pool)
@@ -123,7 +123,7 @@ func handleSchedulePoolUpgradeProposal(ctx sdk.Context, k keeper.Keeper, p *type
 	var scheduledAt uint64
 
 	// If upgrade time was already surpassed we upgrade immediately
-	if (p.ScheduledAt < uint64(ctx.BlockTime().Unix())) {
+	if p.ScheduledAt < uint64(ctx.BlockTime().Unix()) {
 		scheduledAt = uint64(ctx.BlockTime().Unix())
 	} else {
 		scheduledAt = p.ScheduledAt
@@ -140,15 +140,15 @@ func handleSchedulePoolUpgradeProposal(ctx sdk.Context, k keeper.Keeper, p *type
 		if pool.UpgradePlan.ScheduledAt > 0 {
 			continue
 		}
-	
+
 		// register upgrade plan
 		pool.UpgradePlan = &types.UpgradePlan{
-			Version: p.Version,
-			Binaries: p.Binaries,
+			Version:     p.Version,
+			Binaries:    p.Binaries,
 			ScheduledAt: scheduledAt,
-			Duration: p.Duration,
+			Duration:    p.Duration,
 		}
-	
+
 		// Update the pool
 		k.SetPool(ctx, pool)
 	}
@@ -163,7 +163,7 @@ func handleCancelPoolUpgradeProposal(ctx sdk.Context, k keeper.Keeper, p *types.
 		if pool.Runtime != p.Runtime {
 			continue
 		}
-		
+
 		// Continue if there is no upgrade scheduled
 		if pool.UpgradePlan.ScheduledAt == 0 {
 			continue
@@ -186,7 +186,8 @@ func handleResetPoolProposal(ctx sdk.Context, k keeper.Keeper, p *types.ResetPoo
 		return sdkerrors.Wrapf(sdkerrors.ErrNotFound, types.ErrPoolNotFound.Error(), p.Id)
 	}
 
-	// get all proposals equal or bigger than bundleId
+	proposalsToDelete := k.GetProposalsByPoolIdSinceBundleId(ctx, p.Id, p.BundleId)
+	_ = proposalsToDelete
 
 	// Update the pool
 	k.SetPool(ctx, pool)

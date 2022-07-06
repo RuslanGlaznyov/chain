@@ -40,9 +40,9 @@ const (
 
 // voting
 const (
-	VoteEventKey      = "Voted"
+	VoteEventKey       = "Voted"
 	VoteEventStorageId = "StorageId"
-	VoteEventVote     = "Vote"
+	VoteEventVote      = "Vote"
 )
 
 // slashing
@@ -169,8 +169,8 @@ func ProposalKey(storageId string) []byte {
 }
 
 // ProposalKeyIndex2 ...
-func ProposalKeyIndex2(poolId uint64, fromId uint64) []byte {
-	return KeyPrefixBuilder{}.AInt(poolId).AInt(fromId).Key
+func ProposalKeyIndex2(poolId uint64, id uint64) []byte {
+	return KeyPrefixBuilder{}.AInt(poolId).AInt(id).Key
 }
 
 // ProposalKeyIndex3 ...

@@ -16,7 +16,7 @@ func (k Keeper) SetProposal(ctx sdk.Context, proposal types.Proposal) {
 
 	// Insert bundle id for second index
 	storeIndex := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex2)
-	storeIndex.Set(types.ProposalKeyIndex2(proposal.PoolId, proposal.FromHeight), []byte(proposal.StorageId))
+	storeIndex.Set(types.ProposalKeyIndex2(proposal.PoolId, proposal.Id), []byte(proposal.StorageId))
 
 	// Insert bundle id for second index
 	storeIndex3 := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex3)
@@ -38,13 +38,52 @@ func (k Keeper) GetProposal(ctx sdk.Context, storageId string) (val types.Propos
 	return val, true
 }
 
+// GetProposalByPoolIdAndBundleId returns a proposal from its index
+func (k Keeper) GetProposalByPoolIdAndBundleId(ctx sdk.Context, poolId uint64, bundleId uint64) (val types.Proposal, found bool) {
+	// Insert bundle id for second index
+	storeIndex2 := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex2)
+	storageIdBytes := storeIndex2.Get(types.ProposalKeyIndex2(poolId, bundleId))
+
+	if storageIdBytes == nil {
+		return val, false
+	}
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProposalKeyPrefix))
+
+	b := store.Get(types.ProposalKey(string(storageIdBytes)))
+	if b == nil {
+		return val, false
+	}
+
+	k.cdc.MustUnmarshal(b, &val)
+	return val, true
+}
+
+// GetProposalsByPoolIdSinceBundleId returns for a given pool all proposals that have
+// an ID equal or higher to minBundleId
+func (k Keeper) GetProposalsByPoolIdSinceBundleId(ctx sdk.Context, poolId uint64, minBundleId uint64) (proposals []types.Proposal) {
+	proposalPrefixBuilder := types.KeyPrefixBuilder{Key: types.ProposalKeyPrefixIndex2}.AInt(poolId)
+	proposalIndexStore := prefix.NewStore(ctx.KVStore(k.storeKey), proposalPrefixBuilder.Key)
+	proposalIndexIterator := proposalIndexStore.Iterator(nil, types.KeyPrefixBuilder{}.AInt(minBundleId).Key)
+
+	defer proposalIndexIterator.Close()
+
+	if proposalIndexIterator.Valid() {
+		storageId := string(proposalIndexIterator.Value())
+		proposal, _ := k.GetProposal(ctx, storageId)
+		proposals = append(proposals, proposal)
+	}
+
+	return
+}
+
 // RemoveProposal removes a proposal from the store
 func (k Keeper) RemoveProposal(ctx sdk.Context, proposal types.Proposal) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProposalKeyPrefix))
 	store.Delete(types.ProposalKey(proposal.StorageId))
 
 	indexStore2 := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex2)
-	indexStore2.Delete(types.ProposalKeyIndex2(proposal.PoolId, proposal.FromHeight))
+	indexStore2.Delete(types.ProposalKeyIndex2(proposal.PoolId, proposal.Id))
 
 	// Insert bundle id for second index
 	storeIndex3 := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex3)
@@ -65,4 +104,30 @@ func (k Keeper) GetAllProposal(ctx sdk.Context) (list []types.Proposal) {
 	}
 
 	return
+}
+
+// TODO delete this function after v0.6.0 migration
+func (k Keeper) UpgradeHelperV060MigrateSecondIndex(ctx sdk.Context) {
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex2)
+	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	keysToDelete := make([][]byte, 10000)
+
+	for ; iterator.Valid(); iterator.Next() {
+		keysToDelete = append(keysToDelete, iterator.Key())
+	}
+
+	for _, key := range keysToDelete {
+		store.Delete(key)
+	}
+
+	storeIndex := prefix.NewStore(ctx.KVStore(k.storeKey), types.ProposalKeyPrefixIndex2)
+	for _, proposal := range k.GetAllProposal(ctx) {
+		// Insert bundle id for second index
+		storeIndex.Set(types.ProposalKeyIndex2(proposal.PoolId, proposal.Id), []byte(proposal.StorageId))
+	}
+
 }
