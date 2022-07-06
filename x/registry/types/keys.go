@@ -29,51 +29,6 @@ const (
 	KYVE_NO_DATA_BUNDLE = "KYVE_NO_DATA_BUNDLE"
 )
 
-// ========== EVENTS ===================
-// general event props
-const (
-	EventName    = "EventName"
-	EventPoolId  = "PoolId"
-	EventCreator = "Creator"
-	EventAmount  = "Amount"
-)
-
-// voting
-const (
-	VoteEventKey       = "Voted"
-	VoteEventStorageId = "StorageId"
-	VoteEventVote      = "Vote"
-)
-
-// slashing
-const (
-	SlashEventKey = "ReceivedSlash"
-	SlashAccount  = "Account"
-)
-
-// Activity
-const (
-	ProposalEventKey          = "ProposalEnded"
-	ProposalEventStorageId    = "StorageId"
-	ProposalEventByteSize     = "ByteSize"
-	ProposalEventUploader     = "Uploader"
-	ProposalEventNextUploader = "NextUploader"
-	ProposalEventReward       = "BundleReward"
-	ProposalEventValid        = "Valid"
-	ProposalEventInvalid      = "Invalid"
-	ProposalEventFromHeight   = "FromHeight"
-	ProposalEventToHeight     = "ToHeight"
-	ProposalEventStatus       = "Status"
-)
-
-const (
-	UpdateMetadataEventKey   = "UpdateMetadata"
-	UpdateMetadataCommission = "Commission"
-	UpdateMetadataMoniker    = "Moniker"
-	UpdateMetadataWebsite    = "Website"
-	UpdateMetadataLogo       = "Logo"
-)
-
 // ============ KV-STORE ===============
 
 func KeyPrefix(p string) []byte {
