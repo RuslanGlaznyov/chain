@@ -45,11 +45,11 @@ var (
 	ErrPoolNoUpgradeScheduled   = sdkerrors.Register(ModuleName, 1122, "pool has no scheduled upgrade")
 	ErrToHeight   = sdkerrors.Register(ModuleName, 1123, "invalid to height")
 	ErrFromKey   = sdkerrors.Register(ModuleName, 1124, "invalid from key")
-	ErrProposalNotFound = sdkerrors.Register(ModuleName, 1100, "proposal with pool id %v and bundle id %v does not exist")
+	ErrProposalNotFound = sdkerrors.Register(ModuleName, 1125, "proposal with pool id %v and bundle id %v does not exist")
 )
 
 // delegation errors
 var (
-	ErrNotADelegator       = sdkerrors.Register(ModuleName, 1125, "not a delegator")
-	ErrNotEnoughDelegation = sdkerrors.Register(ModuleName, 1126, "undelegate-amount is larger than current delegation")
+	ErrNotADelegator       = sdkerrors.Register(ModuleName, 1126, "not a delegator")
+	ErrNotEnoughDelegation = sdkerrors.Register(ModuleName, 1127, "undelegate-amount is larger than current delegation")
 )
