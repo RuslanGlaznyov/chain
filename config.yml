@@ -28,18 +28,13 @@ genesis:
     gov:
       voting_params:
         # 1 day
-        voting_period: "86400s"
+        voting_period: "120s"
         proposal_voting_periods: [
           {
             proposal_type: "kyve.registry.v1beta1.CreatePoolProposal",
             # 2 hours
-            voting_period: "7200s"
+            voting_period: "120s"
           },
-          {
-            proposal_type: "kyve.registry.v1beta1.PausePoolProposal",
-            # 5 minutes
-            voting_period: "300s"
-          }
         ]
         # 30 minutes
         expedited_voting_period: "1800s"
