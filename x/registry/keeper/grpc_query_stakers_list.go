@@ -22,6 +22,8 @@ func (k Keeper) StakersList(goCtx context.Context, req *types.QueryStakersListRe
 
 	response := types.QueryStakersListResponse{}
 
+	// TODO filter by Status and Pagination
+
 	// Load pool
 	pool, found := k.GetPool(ctx, req.PoolId)
 	if !found {

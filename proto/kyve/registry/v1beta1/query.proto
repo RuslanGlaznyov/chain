@@ -230,12 +230,17 @@ message QueryFunderResponse {
 message QueryStakersListRequest {
   // pool_id defines the unique ID of the pool.
   uint64 pool_id = 1;
+
+  StakerStatus status = 2;
+
+  cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 // QueryStakersListResponse is the response type for the Query/StakersList RPC method.
 message QueryStakersListResponse {
   // stakers ...
   repeated kyve.registry.v1beta1.StakerResponse stakers = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryStakerRequest is the request type for the Query/Staker RPC method.
@@ -278,6 +283,8 @@ message StakerResponse {
   uint64 unbonding_amount = 11;
   // upload_probability
   string upload_probability = 12;
+  // status
+  StakerStatus status = 13;
 }
 
 // ######################

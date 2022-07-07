@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package kyve.registry.v1beta1;
 
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/KYVENetwork/chain/x/registry/types";
 
 // BundleProposal ...
@@ -186,6 +188,10 @@ message Pool {
   string current_key = 28;
   // current_value ...
   string current_value = 29;
+  // inactive_stakers
+  repeated string inactive_stakers = 30;
+  //
+  uint64 total_inactive_stake = 31;
 }
 
 // Proposal ...
@@ -212,6 +218,18 @@ message Proposal {
   string bundle_hash = 10;
 }
 
+// StakerStatus ...
+enum StakerStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // STAKER_STATUS_UNSPECIFIED ...
+  STAKER_STATUS_UNSPECIFIED = 0;
+  // STAKER_STATUS_ACTIVE ...
+  STAKER_STATUS_ACTIVE = 1;
+  // STAKER_STATUS_INACTIVE ...
+  STAKER_STATUS_INACTIVE = 2;
+}
+
 // Staker ...
 message Staker {
   // staker ...
@@ -232,6 +250,8 @@ message Staker {
   string logo = 8;
   // points
   uint64 points = 9;
+  // status
+  StakerStatus status = 10;
 }
 
 // UnbondingStakingEntry
