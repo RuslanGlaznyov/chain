@@ -11,9 +11,6 @@ describe("chain", () => {
 
   beforeAll(async () => {
     startChain.isIgniteMod = process.env.IGNITE_MODE === 'true'
-    Boolean(process.env.IGNITE_MODE)
-    console.log(process.env.IGNITE_MODE);
-    console.log(startChain.isIgniteMod);
     if(!startChain.isIgniteMod  && !process.env.COSMOS_BINARY?.length) {
       console.error("COSMOS_BINARY doesn't set")
       process.exit(1)
