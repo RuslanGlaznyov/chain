@@ -5,7 +5,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "IGNITE_MODE=false jest",
+    "test:ignite": "IGNITE_MODE=true jest",
     "format": "prettier --write ."
   },
   "jest": {
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
+    "dotenv": "^16.0.1",
     "jest": "^27.5.1",
     "prettier": "^2.7.1",
     "ts-jest": "^27.1.4",
