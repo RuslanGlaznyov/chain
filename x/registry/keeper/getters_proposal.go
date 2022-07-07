@@ -114,10 +114,13 @@ func (k Keeper) UpgradeHelperV060MigrateSecondIndex(ctx sdk.Context) {
 
 	defer iterator.Close()
 
-	keysToDelete := make([][]byte, 10000)
+	var keysToDelete [][]byte
 
 	for ; iterator.Valid(); iterator.Next() {
-		keysToDelete = append(keysToDelete, iterator.Key())
+		keyArray := iterator.Key()
+		var key = make([]byte, len(keyArray))
+		copy(key, keyArray)
+		keysToDelete = append(keysToDelete, key)
 	}
 
 	println("Delete ", len(keysToDelete), " index keys")
