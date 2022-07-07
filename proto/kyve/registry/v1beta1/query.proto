@@ -69,9 +69,14 @@ service Query {
     option (google.api.http).get = "/kyve/registry/v1beta1/proposal_by_height/{pool_id}/{height}";
   }
 
-  // ProposalByHeight ...
+  // ProposalSinceFinalizedAt ...
   rpc ProposalSinceFinalizedAt(QueryProposalSinceFinalizedAtRequest) returns (QueryProposalSinceFinalizedAtResponse) {
     option (google.api.http).get = "/kyve/registry/v1beta1/proposal_since_finalized_at/{pool_id}/{finalized_at}";
+  }
+
+  // ProposalSinceId ...
+  rpc ProposalSinceId(QueryProposalSinceIdRequest) returns (QueryProposalSinceIdResponse) {
+    option (google.api.http).get = "/kyve/registry/v1beta1/proposal_since_id/{pool_id}/{id}";
   }
 
   // PROTOCOL NODE - FLOW
@@ -333,6 +338,24 @@ message QueryProposalSinceFinalizedAtRequest {
 
 // QueryProposalByFinalizedAtResponse ...
 message QueryProposalSinceFinalizedAtResponse {
+  // proposal ...
+  repeated kyve.registry.v1beta1.Proposal proposals = 1 [(gogoproto.nullable) = false];
+  // pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryProposalSinceIdRequest ...
+message QueryProposalSinceIdRequest {
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  // pool_id ...
+  uint64 pool_id = 2;
+  // height ...
+  uint64 id = 3;
+}
+
+// QueryProposalSinceIdResponse ...
+message QueryProposalSinceIdResponse {
   // proposal ...
   repeated kyve.registry.v1beta1.Proposal proposals = 1 [(gogoproto.nullable) = false];
   // pagination defines the pagination in the response.
