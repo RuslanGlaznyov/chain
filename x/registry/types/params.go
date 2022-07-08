@@ -56,6 +56,16 @@ var (
 	DefaultUnbondingDelegationTime uint64 = 60 * 60 * 24 * 5
 )
 
+var (
+	KeyRedelegationCooldown            = []byte("RedelegationCooldown")
+	DefaultRedelegationCooldown uint64 = 60 // TODO Change to 5 days
+)
+
+var (
+	KeyRedelegationMaxAmount            = []byte("KeyRedelegationMaxAmount")
+	DefaultRedelegationMaxAmount uint64 = 3 // TODO think about amount?
+)
+
 // ParamKeyTable the param Key table for launch module
 func ParamKeyTable() paramtypes.KeyTable {
 	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
@@ -72,6 +82,8 @@ func NewParams(
 	maxPoints uint64,
 	unbondingStakingTime uint64,
 	unbondingDelegationTime uint64,
+	redelegationCooldown uint64,
+	redelegationMaxAmount uint64,
 ) Params {
 	return Params{
 		VoteSlash:               voteSlash,
@@ -83,6 +95,8 @@ func NewParams(
 		MaxPoints:               maxPoints,
 		UnbondingStakingTime:    unbondingStakingTime,
 		UnbondingDelegationTime: unbondingDelegationTime,
+		RedelegationCooldown:    redelegationCooldown,
+		RedelegationMaxAmount:   redelegationMaxAmount,
 	}
 }
 
@@ -98,6 +112,8 @@ func DefaultParams() Params {
 		DefaultMaxPoints,
 		DefaultUnbondingStakingTime,
 		DefaultUnbondingDelegationTime,
+		DefaultRedelegationCooldown,
+		DefaultRedelegationMaxAmount,
 	)
 }
 
@@ -113,6 +129,8 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyMaxPoints, &p.MaxPoints, validateMaxPoints),
 		paramtypes.NewParamSetPair(KeyUnbondingStakingTime, &p.UnbondingStakingTime, validateUnbondingStakingTime),
 		paramtypes.NewParamSetPair(KeyUnbondingDelegationTime, &p.UnbondingDelegationTime, validateUnbondingDelegationTime),
+		paramtypes.NewParamSetPair(KeyRedelegationCooldown, &p.RedelegationCooldown, nil),
+		paramtypes.NewParamSetPair(KeyRedelegationMaxAmount, &p.RedelegationMaxAmount, nil),
 	}
 }
 

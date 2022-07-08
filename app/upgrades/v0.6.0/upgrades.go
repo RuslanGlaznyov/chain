@@ -9,12 +9,16 @@ import (
 )
 
 func migrateStakers(registryKeeper *registrykeeper.Keeper, ctx sdk.Context) {
-
 	for _, staker := range registryKeeper.GetAllStaker(ctx) {
 		staker.Status = types.STAKER_STATUS_ACTIVE
 		registryKeeper.GetStaker(ctx, staker.Account, staker.PoolId)
 	}
+}
 
+func createRedelegationParameters(registryKeeper *registrykeeper.Keeper, ctx sdk.Context) {
+	registryKeeper.ParamStore().Set(ctx, types.KeyRedelegationCooldown, types.DefaultRedelegationCooldown)
+
+	registryKeeper.ParamStore().Set(ctx, types.KeyRedelegationMaxAmount, types.DefaultRedelegationMaxAmount)
 }
 
 func CreateUpgradeHandler(
@@ -25,6 +29,8 @@ func CreateUpgradeHandler(
 		registryKeeper.UpgradeHelperV060MigrateSecondIndex(ctx)
 
 		migrateStakers(registryKeeper, ctx)
+
+		createRedelegationParameters(registryKeeper, ctx)
 
 		return vm, nil
 	}
