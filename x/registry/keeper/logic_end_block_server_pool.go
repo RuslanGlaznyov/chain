@@ -23,6 +23,8 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 			pool.Status = types.POOL_STATUS_PAUSED
 		} else if len(pool.Stakers) < 2 {
 			pool.Status = types.POOL_STATUS_NOT_ENOUGH_VALIDATORS
+		} else if pool.TotalStake < pool.MinStake {
+			pool.Status = types.POOL_STATUS_NOT_ENOUGH_STAKE
 		} else if pool.TotalFunds == 0 {
 			pool.Status = types.POOL_STATUS_NO_FUNDS
 		} else {

@@ -53,6 +53,7 @@ func handleCreatePoolProposal(ctx sdk.Context, k keeper.Keeper, p *types.CreateP
 		UpgradePlan: &types.UpgradePlan{},
 		StartKey:    p.StartKey,
 		Status: types.POOL_STATUS_NOT_ENOUGH_VALIDATORS,
+		MinStake: p.MinStake,
 	}
 
 	k.AppendPool(ctx, pool)
@@ -73,6 +74,7 @@ func handleUpdatePoolProposal(ctx sdk.Context, k keeper.Keeper, p *types.UpdateP
 	pool.UploadInterval = p.UploadInterval
 	pool.OperatingCost = p.OperatingCost
 	pool.MaxBundleSize = p.MaxBundleSize
+	pool.MinStake = p.MinStake
 
 	k.SetPool(ctx, pool)
 

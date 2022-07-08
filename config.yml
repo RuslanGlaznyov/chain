@@ -116,6 +116,7 @@ genesis:
           current_key: "",
           current_value: "",
 
+          min_stake: "300000000000",
           status: "POOL_STATUS_NOT_ENOUGH_VALIDATORS"
         }
       ]
