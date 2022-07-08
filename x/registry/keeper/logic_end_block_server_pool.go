@@ -16,6 +16,27 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 
 	// Iterate over all pools.
 	for _, pool := range pools {
+		// Set pool status
+		if pool.UpgradePlan.ScheduledAt > 0 && uint64(ctx.BlockTime().Unix()) >= pool.UpgradePlan.ScheduledAt {
+			pool.Status = types.POOL_STATUS_UPGRADING
+		} else if pool.Paused {
+			pool.Status = types.POOL_STATUS_PAUSED
+		} else if len(pool.Stakers) < 2 {
+			pool.Status = types.POOL_STATUS_NOT_ENOUGH_VALIDATORS
+		} else if pool.TotalFunds == 0 {
+			pool.Status = types.POOL_STATUS_NO_FUNDS
+		} else {
+			pool.Status = types.POOL_STATUS_ACTIVE
+		}
+
+		// Remove next uploader if pool is not active
+		if pool.Status != types.POOL_STATUS_ACTIVE {
+			pool.BundleProposal.NextUploader = ""
+		}
+
+		// Update status
+		k.SetPool(ctx, pool)
+
 		// Check if there is an upcoming pool upgrade
 		if pool.UpgradePlan.ScheduledAt > 0 && uint64(ctx.BlockTime().Unix()) >= pool.UpgradePlan.ScheduledAt {
 			// Check if pool upgrade already has been applied
@@ -35,34 +56,6 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 			k.SetPool(ctx, pool)
 		}
 
-		// Remove next uploader immediately if not enough nodes are online
-		if len(pool.Stakers) < 2 && pool.BundleProposal.NextUploader != "" {
-			pool.BundleProposal.NextUploader = ""
-			k.SetPool(ctx, pool)
-			continue
-		}
-
-		// Remove next uploader immediately if pool has no funds
-		if pool.TotalFunds == 0 && pool.BundleProposal.NextUploader != "" {
-			pool.BundleProposal.NextUploader = ""
-			k.SetPool(ctx, pool)
-			continue
-		}
-
-		// Remove next uploader immediately if pool is paused
-		if pool.Paused && pool.BundleProposal.NextUploader != "" {
-			pool.BundleProposal.NextUploader = ""
-			k.SetPool(ctx, pool)
-			continue
-		}
-
-		// Remove next uploader immediately if pool is upgrading
-		if pool.UpgradePlan.ScheduledAt > 0 && uint64(ctx.BlockTime().Unix()) >= pool.UpgradePlan.ScheduledAt && pool.BundleProposal.NextUploader != "" {
-			pool.BundleProposal.NextUploader = ""
-			k.SetPool(ctx, pool)
-			continue
-		}
-
 		// Skip if we haven't reached the upload interval.
 		if uint64(ctx.BlockTime().Unix()) < (pool.BundleProposal.CreatedAt + pool.UploadInterval) {
 			continue
@@ -70,18 +63,11 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 
 		// Check if bundle needs to be dropped
 		if pool.BundleProposal.StorageId != "" && !strings.HasPrefix(pool.BundleProposal.StorageId, types.KYVE_NO_DATA_BUNDLE) {
-			// Check if quorum has already been reached.
-			valid := false
-			invalid := false
-
-			if len(pool.Stakers) > 1 {
-				// subtract one because of uploader
-				valid = len(pool.BundleProposal.VotersValid)*2 > (len(pool.Stakers) - 1)
-				invalid = len(pool.BundleProposal.VotersInvalid)*2 >= (len(pool.Stakers) - 1)
-			}
-
 			// check if the quorum was actually reached
-			if !valid && !invalid {
+			valid, invalid, abstain, total := k.getVoteDistribution(ctx, &pool)
+			quorum := k.getQuorumStatus(valid, invalid, abstain, total)
+
+			if quorum == types.BUNDLE_STATUS_NO_QUORUM {
 				// handle stakers who did not vote at all
 				k.handleNonVoters(ctx, &pool)
 
@@ -103,14 +89,16 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 					Uploader:     pool.BundleProposal.Uploader,
 					NextUploader: pool.BundleProposal.NextUploader,
 					Reward:       0,
-					Valid:        uint64(len(pool.BundleProposal.VotersValid)),
-					Invalid:      uint64(len(pool.BundleProposal.VotersInvalid)),
+					Valid:        valid,
+					Invalid:      invalid,
 					FromHeight:   pool.BundleProposal.FromHeight,
 					ToHeight:     pool.BundleProposal.ToHeight,
 					Status:       types.BUNDLE_STATUS_NO_QUORUM,
 					ToKey:        pool.BundleProposal.ToKey,
 					ToValue:      pool.BundleProposal.ToValue,
 					Id:           0,
+					Abstain: abstain,
+					Total: total,
 				})
 
 				pool.BundleProposal = &types.BundleProposal{

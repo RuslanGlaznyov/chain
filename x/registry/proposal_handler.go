@@ -52,6 +52,7 @@ func handleCreatePoolProposal(ctx sdk.Context, k keeper.Keeper, p *types.CreateP
 		},
 		UpgradePlan: &types.UpgradePlan{},
 		StartKey:    p.StartKey,
+		Status: types.POOL_STATUS_NOT_ENOUGH_VALIDATORS,
 	}
 
 	k.AppendPool(ctx, pool)

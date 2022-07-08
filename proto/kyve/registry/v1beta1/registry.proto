@@ -2,7 +2,27 @@ syntax = "proto3";
 
 package kyve.registry.v1beta1;
 
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/KYVENetwork/chain/x/registry/types";
+
+// PoolStatus ...
+enum PoolStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // POOL_STATUS_UNSPECIFIED ...
+  POOL_STATUS_UNSPECIFIED = 0;
+  // POOL_STATUS_ACTIVE ...
+  POOL_STATUS_ACTIVE = 1;
+  // POOL_STATUS_PAUSED ...
+  POOL_STATUS_PAUSED = 2;
+  // POOL_STATUS_NO_FUNDS ...
+  POOL_STATUS_NO_FUNDS = 3;
+  // POOL_STATUS_NOT_ENOUGH_VALIDATORS ...
+  POOL_STATUS_NOT_ENOUGH_VALIDATORS = 4;
+  // POOL_STATUS_UPGRADING ...
+  POOL_STATUS_UPGRADING = 5;
+}
 
 // BundleProposal ...
 message BundleProposal {
@@ -186,6 +206,9 @@ message Pool {
   string current_key = 28;
   // current_value ...
   string current_value = 29;
+
+  // status ...
+  PoolStatus status = 30;
 }
 
 // Proposal ...

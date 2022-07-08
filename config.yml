@@ -114,7 +114,9 @@ genesis:
             
           start_key: "0",
           current_key: "",
-          current_value: ""
+          current_value: "",
+
+          status: "POOL_STATUS_NOT_ENOUGH_VALIDATORS"
         }
       ]
 validator:
