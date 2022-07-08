@@ -41,7 +41,7 @@ var (
 	_ govtypes.Content = &ResetPoolProposal{}
 )
 
-func NewCreatePoolProposal(title string, description string, name string, runtime string, logo string, config string, startHeight uint64, uploadInterval uint64, operatingCost uint64, maxBundleSize uint64, version string, binaries string, startKey string, minStake uint64) govtypes.Content {
+func NewCreatePoolProposal(title string, description string, name string, runtime string, logo string, config string, uploadInterval uint64, operatingCost uint64, maxBundleSize uint64, version string, binaries string, startKey string, minStake uint64) govtypes.Content {
 	return &CreatePoolProposal{
 		Title:         title,
 		Description:   description,
@@ -49,7 +49,6 @@ func NewCreatePoolProposal(title string, description string, name string, runtim
 		Runtime:       runtime,
 		Logo:          logo,
 		Config:        config,
-		StartHeight:   startHeight,
 		UploadInterval: uploadInterval,
 		OperatingCost: operatingCost,
 		MaxBundleSize: maxBundleSize,

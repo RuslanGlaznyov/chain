@@ -22,7 +22,6 @@ type CreatePoolRequest struct {
 	Runtime        string       `json:"runtime" yaml:"runtime"`
 	Logo           string       `json:"logo" yaml:"logo"`
 	Config         string       `json:"config" yaml:"config"`
-	StartHeight    uint64       `json:"startHeight" yaml:"startHeight"`
 	UploadInterval uint64       `json:"uploadInterval" yaml:"uploadInterval"`
 	OperatingCost  uint64       `json:"operatingCost" yaml:"operatingCost"`
 	MaxBundleSize  uint64       `json:"maxBundleSize" yaml:"maxBundleSize"`
@@ -57,7 +56,7 @@ func newCreatePoolHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		content := types.NewCreatePoolProposal(req.Title, req.Description, req.Name, req.Runtime, req.Logo, req.Config, req.StartHeight, req.UploadInterval, req.OperatingCost, req.MaxBundleSize, req.Version, req.Binaries, req.StartKey, req.MinStake)
+		content := types.NewCreatePoolProposal(req.Title, req.Description, req.Name, req.Runtime, req.Logo, req.Config, req.UploadInterval, req.OperatingCost, req.MaxBundleSize, req.Version, req.Binaries, req.StartKey, req.MinStake)
 		msg, err := govtypes.NewMsgSubmitProposal(content, req.Deposit, fromAddr, req.IsExpedited)
 		if rest.CheckBadRequestError(w, err) {
 			return

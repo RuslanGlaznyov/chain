@@ -387,19 +387,19 @@ func (k Keeper) getQuorumStatus(valid uint64, invalid uint64, abstain uint64, to
 	return types.BUNDLE_STATUS_NO_QUORUM
 }
 
-func removeStakerFromList(addresses []string, address string) []string {
-	for i, other := range addresses {
-		if other == address {
-			return append(addresses[0:i], addresses[i+1:]...)
+func removeStringFromList(list []string, el string) []string {
+	for i, other := range list {
+		if other == el {
+			return append(list[0:i], list[i+1:]...)
 		}
 	}
-	return addresses
+	return list
 }
 
 // Contract: assumes stakers list has still a free slot
 func deactivateStaker(pool *types.Pool, staker *types.Staker) {
 	// make user an inactive staker
-	pool.Stakers = removeStakerFromList(pool.Stakers, staker.Account)
+	pool.Stakers = removeStringFromList(pool.Stakers, staker.Account)
 	pool.InactiveStakers = append(pool.InactiveStakers, staker.Account)
 	pool.TotalStake -= staker.Amount
 	pool.TotalInactiveStake += staker.Amount
