@@ -99,10 +99,15 @@ func (k msgServer) VoteProposal(
 		)
 	}
 
-	if hasVotedAbstain && msg.Vote == types.VOTE_TYPE_ABSTAIN {
-		return nil, sdkErrors.Wrapf(
-			sdkErrors.ErrUnauthorized, types.ErrAlreadyVoted.Error(), pool.BundleProposal.StorageId,
-		)
+	if hasVotedAbstain {
+		if msg.Vote == types.VOTE_TYPE_ABSTAIN {
+			return nil, sdkErrors.Wrapf(
+				sdkErrors.ErrUnauthorized, types.ErrAlreadyVoted.Error(), pool.BundleProposal.StorageId,
+			)
+		}
+
+		// remove voter from abstain votes
+		pool.BundleProposal.VotersAbstain = removeStringFromList(pool.BundleProposal.VotersAbstain, msg.Creator)
 	}
 
 	// Update and return.

@@ -58,15 +58,10 @@ func GetTxCmd() *cobra.Command {
 func CmdSubmitCreatePoolProposal() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-pool [flags]",
-		Args:  cobra.ExactArgs(12),
+		Args:  cobra.ExactArgs(11),
 		Short: "Submit a proposal to create a pool.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			startHeight, err := strconv.ParseUint(args[4], 10, 64)
 			if err != nil {
 				return err
 			}
@@ -112,7 +107,7 @@ func CmdSubmitCreatePoolProposal() *cobra.Command {
 				return err
 			}
 
-			content := types.NewCreatePoolProposal(title, description, args[0], args[1], args[2], args[3], startHeight, uploadInterval, operatingCost, maxBundleSize, args[8], args[9], args[10], minStake)
+			content := types.NewCreatePoolProposal(title, description, args[0], args[1], args[2], args[3], uploadInterval, operatingCost, maxBundleSize, args[8], args[9], args[10], minStake)
 
 			isExpedited, err := cmd.Flags().GetBool(cli.FlagIsExpedited)
 			if err != nil {
@@ -145,7 +140,7 @@ func CmdSubmitCreatePoolProposal() *cobra.Command {
 func CmdSubmitUpdatePoolProposal() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-pool [flags]",
-		Args:  cobra.ExactArgs(8),
+		Args:  cobra.ExactArgs(9),
 		Short: "Submit a proposal to update a pool.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)

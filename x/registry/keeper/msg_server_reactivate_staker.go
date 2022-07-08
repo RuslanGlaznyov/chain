@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+
 	sdkErrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/KYVENetwork/chain/x/registry/types"
@@ -53,7 +54,7 @@ func (k msgServer) ReactivateStaker(
 		}
 	}
 
-	pool.InactiveStakers = removeStakerFromList(pool.InactiveStakers, staker.Account)
+	pool.InactiveStakers = removeStringFromList(pool.InactiveStakers, staker.Account)
 	pool.Stakers = append(pool.Stakers, staker.Account)
 	pool.TotalStake += staker.Amount
 	pool.TotalInactiveStake -= staker.Amount
