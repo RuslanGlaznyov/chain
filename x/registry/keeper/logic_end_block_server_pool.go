@@ -150,7 +150,7 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 			// check if next uploader is still there or already removed
 			if foundStaker {
 
-				changeStakerStatus(&pool, &staker, types.STAKER_STATUS_INACTIVE)
+				deactivateStaker(&pool, &staker)
 				k.SetStaker(ctx, staker)
 
 				ctx.EventManager().EmitTypedEvent(&types.EventStakerStatusChanged{

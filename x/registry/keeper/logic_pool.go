@@ -63,7 +63,7 @@ func (k Keeper) handleNonVoters(ctx sdk.Context, pool *types.Pool) {
 
 				// check if next uploader is still there or already removed
 				if foundStaker {
-					changeStakerStatus(pool, &staker, types.STAKER_STATUS_INACTIVE)
+					deactivateStaker(pool, &staker)
 					k.SetStaker(ctx, staker)
 
 					ctx.EventManager().EmitTypedEvent(&types.EventStakerStatusChanged{
@@ -340,21 +340,11 @@ func removeStakerFromList(addresses []string, address string) []string {
 }
 
 // Contract: assumes stakers list has still a free slot
-func changeStakerStatus(pool *types.Pool, staker *types.Staker, status types.StakerStatus) {
-
-	if status == types.STAKER_STATUS_UNSPECIFIED ||
-		staker.Status == status {
-		return
-	} else if status == types.STAKER_STATUS_ACTIVE {
-		// make user an active staker
-		pool.InactiveStakers = removeStakerFromList(pool.InactiveStakers, staker.Account)
-		pool.TotalStake += staker.Amount
-		pool.TotalInactiveStake -= staker.Amount
-	} else if status == types.STAKER_STATUS_INACTIVE {
-		// make user an inactive staker
-		pool.Stakers = removeStakerFromList(pool.Stakers, staker.Account)
-		pool.TotalStake -= staker.Amount
-		pool.TotalInactiveStake += staker.Amount
-	}
-	staker.Status = status
+func deactivateStaker(pool *types.Pool, staker *types.Staker) {
+	// make user an inactive staker
+	pool.Stakers = removeStakerFromList(pool.Stakers, staker.Account)
+	pool.InactiveStakers = append(pool.InactiveStakers, staker.Account)
+	pool.TotalStake -= staker.Amount
+	pool.TotalInactiveStake += staker.Amount
+	staker.Status = types.STAKER_STATUS_INACTIVE
 }

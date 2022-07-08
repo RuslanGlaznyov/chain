@@ -19,6 +19,8 @@ service Msg {
 
   // StakePool ...
   rpc StakePool(MsgStakePool) returns (MsgStakePoolResponse);
+  // StakePool ...
+  rpc ReactivateStaker(MsgReactiveStaker) returns (MsgReactiveStakerResponse);
   // UnstakePool ...
   rpc UnstakePool(MsgUnstakePool) returns (MsgUnstakePoolResponse);
 
@@ -87,6 +89,17 @@ message MsgStakePool {
 
 // MsgStakePoolResponse defines the Msg/StakePool response type.
 message MsgStakePoolResponse {}
+
+// MsgReactiveStaker ...
+message MsgReactiveStaker {
+  // creator ...
+  string creator = 1;
+  // id ...
+  uint64 pool_id = 2;
+}
+
+// MsgReactiveStakerResponse ...
+message MsgReactiveStakerResponse {}
 
 // MsgUnstakePool defines a SDK message for unstaking from a pool.
 message MsgUnstakePool {

@@ -42,7 +42,7 @@ func (k msgServer) StakePool(goCtx context.Context, msg *types.MsgStakePool) (*t
 				}
 
 				// Move the lowest staker to inactive staker set
-				changeStakerStatus(&pool, &lowestStaker, types.STAKER_STATUS_INACTIVE)
+				deactivateStaker(&pool, &lowestStaker)
 
 			} else {
 				return nil, sdkErrors.Wrapf(sdkErrors.ErrLogic, types.ErrStakeTooLow.Error(), lowestStaker.Amount)
