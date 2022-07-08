@@ -423,6 +423,8 @@ message QueryStakeInfoResponse {
   string current_stake = 2;
   // minimum_stake ...
   string minimum_stake = 3;
+  // status ...
+  StakerStatus status = 4;
 }
 
 // ###################

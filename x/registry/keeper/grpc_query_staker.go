@@ -48,7 +48,11 @@ func (k Keeper) Staker(goCtx context.Context, req *types.QueryStakerRequest) (*t
 		Logo:              staker.Logo,
 		Points:            staker.Points,
 		UnbondingAmount:   unbondingStaker.UnbondingAmount,
-		UploadProbability: k.GetUploadProbability(ctx, staker.Account, staker.PoolId).String(),
+		UploadProbability: "0",
+	}
+
+	if staker.Status == types.STAKER_STATUS_ACTIVE {
+		k.GetUploadProbability(ctx, staker.Account, staker.PoolId).String()
 	}
 
 	// Fetch total delegation for staker, as it is stored in DelegationPoolData
