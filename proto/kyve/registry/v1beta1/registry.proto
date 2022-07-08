@@ -208,11 +208,14 @@ message Pool {
   string current_key = 28;
   // current_value ...
   string current_value = 29;
-
+  // inactive_stakers ...
+  repeated string inactive_stakers = 30;
+  // total_inactive_stake ...
+  uint64 total_inactive_stake = 31;
   // min_stake ...
-  uint64 min_stake = 30;
+  uint64 min_stake = 32;
   // status ...
-  PoolStatus status = 31;
+  PoolStatus status = 33;
 }
 
 // Proposal ...
@@ -239,6 +242,18 @@ message Proposal {
   string bundle_hash = 10;
 }
 
+// StakerStatus ...
+enum StakerStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // STAKER_STATUS_UNSPECIFIED ...
+  STAKER_STATUS_UNSPECIFIED = 0;
+  // STAKER_STATUS_ACTIVE ...
+  STAKER_STATUS_ACTIVE = 1;
+  // STAKER_STATUS_INACTIVE ...
+  STAKER_STATUS_INACTIVE = 2;
+}
+
 // Staker ...
 message Staker {
   // staker ...
@@ -259,6 +274,8 @@ message Staker {
   string logo = 8;
   // points
   uint64 points = 9;
+  // status
+  StakerStatus status = 10;
 }
 
 // UnbondingStakingEntry

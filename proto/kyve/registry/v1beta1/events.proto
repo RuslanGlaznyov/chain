@@ -3,6 +3,7 @@ syntax = "proto3";
 package kyve.registry.v1beta1;
 
 import "gogoproto/gogo.proto";
+import "kyve/registry/v1beta1/registry.proto";
 import "kyve/registry/v1beta1/tx.proto";
 
 option go_package = "github.com/KYVENetwork/chain/x/registry/types";
@@ -203,4 +204,14 @@ message EventUnstakePool {
   string address = 2;
   // amount ...
   uint64 amount = 3;
+}
+
+// EventStakerStatusChanged ...
+message EventStakerStatusChanged {
+  // pool_id is the unique ID of the pool.
+  uint64 pool_id = 1;
+  // address is the account address of the protocol node.
+  string address = 2;
+  // amount ...
+  StakerStatus status = 3;
 }

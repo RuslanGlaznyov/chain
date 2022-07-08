@@ -86,7 +86,7 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 				// If consensus wasn't reached, we drop the bundle and emit an event.
 				ctx.EventManager().EmitTypedEvent(&types.EventBundleFinalised{
 					PoolId:       pool.Id,
-					StorageId:     pool.BundleProposal.StorageId,
+					StorageId:    pool.BundleProposal.StorageId,
 					ByteSize:     pool.BundleProposal.ByteSize,
 					Uploader:     pool.BundleProposal.Uploader,
 					NextUploader: pool.BundleProposal.NextUploader,
@@ -139,17 +139,14 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 
 			// check if next uploader is still there or already removed
 			if foundStaker {
-				// remove current next_uploader
-				k.removeStaker(ctx, &pool, &staker)
 
-				// Transfer remaining stake to account.
-				k.TransferToAddress(ctx, staker.Account, staker.Amount)
+				deactivateStaker(&pool, &staker)
+				k.SetStaker(ctx, staker)
 
-				// Emit an unstake event.
-				ctx.EventManager().EmitTypedEvent(&types.EventUnstakePool{
+				ctx.EventManager().EmitTypedEvent(&types.EventStakerStatusChanged{
 					PoolId:  pool.Id,
 					Address: staker.Account,
-					Amount:  staker.Amount,
+					Status:  types.STAKER_STATUS_INACTIVE,
 				})
 			}
 

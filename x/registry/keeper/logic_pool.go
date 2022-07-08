@@ -64,17 +64,13 @@ func (k Keeper) handleNonVoters(ctx sdk.Context, pool *types.Pool) {
 
 				// check if next uploader is still there or already removed
 				if foundStaker {
-					// Transfer remaining stake to account.
-					k.TransferToAddress(ctx, staker.Account, staker.Amount)
+					deactivateStaker(pool, &staker)
+					k.SetStaker(ctx, staker)
 
-					// remove current next_uploader
-					k.removeStaker(ctx, pool, &staker)
-
-					// emit unstake event
-					ctx.EventManager().EmitTypedEvent(&types.EventUnstakePool{
+					ctx.EventManager().EmitTypedEvent(&types.EventStakerStatusChanged{
 						PoolId:  pool.Id,
 						Address: staker.Account,
-						Amount:  staker.Amount,
+						Status:  types.STAKER_STATUS_INACTIVE,
 					})
 				}
 
@@ -371,8 +367,8 @@ func (k Keeper) getVoteDistribution(ctx sdk.Context, pool *types.Pool) (valid ui
 	}
 
 	// halt if nodes voted with more stake than in total
-	if valid + invalid + abstain > total {
-		k.PanicHalt(ctx, fmt.Sprintf("Voted with more $KYVE than staked. Voted = %v, Total Stake = %v", valid + invalid + abstain, total))
+	if valid+invalid+abstain > total {
+		k.PanicHalt(ctx, fmt.Sprintf("Voted with more $KYVE than staked. Voted = %v, Total Stake = %v", valid+invalid+abstain, total))
 	}
 
 	return
@@ -380,13 +376,32 @@ func (k Keeper) getVoteDistribution(ctx sdk.Context, pool *types.Pool) (valid ui
 
 // getQuorumStatus is an internal function evaulates if quorum was reached on a bundle proposal.
 func (k Keeper) getQuorumStatus(valid uint64, invalid uint64, abstain uint64, total uint64) (quorum types.BundleStatus) {
-	if valid * 2 > total {
+	if valid*2 > total {
 		return types.BUNDLE_STATUS_VALID
 	}
 
-	if invalid * 2 >= total {
+	if invalid*2 >= total {
 		return types.BUNDLE_STATUS_INVALID
 	}
 
 	return types.BUNDLE_STATUS_NO_QUORUM
+}
+
+func removeStakerFromList(addresses []string, address string) []string {
+	for i, other := range addresses {
+		if other == address {
+			return append(addresses[0:i], addresses[i+1:]...)
+		}
+	}
+	return addresses
+}
+
+// Contract: assumes stakers list has still a free slot
+func deactivateStaker(pool *types.Pool, staker *types.Staker) {
+	// make user an inactive staker
+	pool.Stakers = removeStakerFromList(pool.Stakers, staker.Account)
+	pool.InactiveStakers = append(pool.InactiveStakers, staker.Account)
+	pool.TotalStake -= staker.Amount
+	pool.TotalInactiveStake += staker.Amount
+	staker.Status = types.STAKER_STATUS_INACTIVE
 }
