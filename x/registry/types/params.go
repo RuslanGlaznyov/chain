@@ -129,8 +129,8 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyMaxPoints, &p.MaxPoints, validateMaxPoints),
 		paramtypes.NewParamSetPair(KeyUnbondingStakingTime, &p.UnbondingStakingTime, validateUnbondingStakingTime),
 		paramtypes.NewParamSetPair(KeyUnbondingDelegationTime, &p.UnbondingDelegationTime, validateUnbondingDelegationTime),
-		paramtypes.NewParamSetPair(KeyRedelegationCooldown, &p.RedelegationCooldown, nil),
-		paramtypes.NewParamSetPair(KeyRedelegationMaxAmount, &p.RedelegationMaxAmount, nil),
+		paramtypes.NewParamSetPair(KeyRedelegationCooldown, &p.RedelegationCooldown, validateTrue),
+		paramtypes.NewParamSetPair(KeyRedelegationMaxAmount, &p.RedelegationMaxAmount, validateTrue),
 	}
 }
 
@@ -172,6 +172,10 @@ func (p Params) Validate() error {
 		return err
 	}
 
+	return nil
+}
+
+func validateTrue(v interface{}) error {
 	return nil
 }
 
