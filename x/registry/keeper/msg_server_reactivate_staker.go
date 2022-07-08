@@ -10,8 +10,8 @@ import (
 
 // ReactivateStaker ...
 func (k msgServer) ReactivateStaker(
-	goCtx context.Context, msg *types.MsgReactiveStaker,
-) (*types.MsgReactiveStakerResponse, error) {
+	goCtx context.Context, msg *types.MsgReactivateStaker,
+) (*types.MsgReactivateStakerResponse, error) {
 	// Unwrap context and attempt to fetch the pool.
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -71,5 +71,5 @@ func (k msgServer) ReactivateStaker(
 		return nil, errEmit
 	}
 
-	return &types.MsgReactiveStakerResponse{}, nil
+	return &types.MsgReactivateStakerResponse{}, nil
 }

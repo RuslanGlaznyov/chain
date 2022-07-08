@@ -529,8 +529,10 @@ func (m *QueryFunderResponse) GetFunder() *Funder {
 // QueryStakersListRequest is the request type for the Query/StakersList RPC method.
 type QueryStakersListRequest struct {
 	// pool_id defines the unique ID of the pool.
-	PoolId     uint64             `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	Status     StakerStatus       `protobuf:"varint,2,opt,name=status,proto3,enum=kyve.registry.v1beta1.StakerStatus" json:"status,omitempty"`
+	PoolId uint64 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	// status ...
+	Status StakerStatus `protobuf:"varint,2,opt,name=status,proto3,enum=kyve.registry.v1beta1.StakerStatus" json:"status,omitempty"`
+	// pagination ...
 	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -591,7 +593,8 @@ func (m *QueryStakersListRequest) GetPagination() *query.PageRequest {
 // QueryStakersListResponse is the response type for the Query/StakersList RPC method.
 type QueryStakersListResponse struct {
 	// stakers ...
-	Stakers    []*StakerResponse   `protobuf:"bytes,1,rep,name=stakers,proto3" json:"stakers,omitempty"`
+	Stakers []*StakerResponse `protobuf:"bytes,1,rep,name=stakers,proto3" json:"stakers,omitempty"`
+	// pagination ...
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 

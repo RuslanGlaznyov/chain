@@ -726,9 +726,9 @@ type Pool struct {
 	CurrentKey string `protobuf:"bytes,28,opt,name=current_key,json=currentKey,proto3" json:"current_key,omitempty"`
 	// current_value ...
 	CurrentValue string `protobuf:"bytes,29,opt,name=current_value,json=currentValue,proto3" json:"current_value,omitempty"`
-	// inactive_stakers
+	// inactive_stakers ...
 	InactiveStakers []string `protobuf:"bytes,30,rep,name=inactive_stakers,json=inactiveStakers,proto3" json:"inactive_stakers,omitempty"`
-	//
+	// total_inactive_stake ...
 	TotalInactiveStake uint64 `protobuf:"varint,31,opt,name=total_inactive_stake,json=totalInactiveStake,proto3" json:"total_inactive_stake,omitempty"`
 }
 

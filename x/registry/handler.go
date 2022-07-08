@@ -26,7 +26,7 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgStakePool:
 			res, err := msgServer.StakePool(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
-		case *types.MsgReactiveStaker:
+		case *types.MsgReactivateStaker:
 			res, err := msgServer.ReactivateStaker(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 		case *types.MsgUnstakePool:

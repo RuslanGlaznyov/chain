@@ -7,17 +7,17 @@ import (
 
 const TypeMsgReactivateStaker = "reactivate_staker"
 
-var _ sdk.Msg = &MsgReactiveStaker{}
+var _ sdk.Msg = &MsgReactivateStaker{}
 
-func (msg *MsgReactiveStaker) Route() string {
+func (msg *MsgReactivateStaker) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgReactiveStaker) Type() string {
+func (msg *MsgReactivateStaker) Type() string {
 	return TypeMsgReactivateStaker
 }
 
-func (msg *MsgReactiveStaker) GetSigners() []sdk.AccAddress {
+func (msg *MsgReactivateStaker) GetSigners() []sdk.AccAddress {
 	creator, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		panic(err)
@@ -25,12 +25,12 @@ func (msg *MsgReactiveStaker) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{creator}
 }
 
-func (msg *MsgReactiveStaker) GetSignBytes() []byte {
+func (msg *MsgReactivateStaker) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgReactiveStaker) ValidateBasic() error {
+func (msg *MsgReactivateStaker) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)

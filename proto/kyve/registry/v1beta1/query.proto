@@ -230,9 +230,9 @@ message QueryFunderResponse {
 message QueryStakersListRequest {
   // pool_id defines the unique ID of the pool.
   uint64 pool_id = 1;
-
+  // status ...
   StakerStatus status = 2;
-
+  // pagination ...
   cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
@@ -240,6 +240,7 @@ message QueryStakersListRequest {
 message QueryStakersListResponse {
   // stakers ...
   repeated kyve.registry.v1beta1.StakerResponse stakers = 1;
+  // pagination ...
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 

@@ -30,7 +30,7 @@ func CmdReactivateStaker() *cobra.Command {
 				return err
 			}
 
-			msg := &types.MsgReactiveStaker{
+			msg := &types.MsgReactivateStaker{
 				Creator: clientCtx.GetFromAddress().String(),
 				PoolId:  poolId,
 			}

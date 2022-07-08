@@ -188,9 +188,9 @@ message Pool {
   string current_key = 28;
   // current_value ...
   string current_value = 29;
-  // inactive_stakers
+  // inactive_stakers ...
   repeated string inactive_stakers = 30;
-  //
+  // total_inactive_stake ...
   uint64 total_inactive_stake = 31;
 }
 
