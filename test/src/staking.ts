@@ -45,7 +45,7 @@ export const staking = () => {
 
     // get stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
 
     // get balance before staking
@@ -70,7 +70,7 @@ export const staking = () => {
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
-      status: 1,
+      status: 0,
     });
 
     // get balance before staking
@@ -98,7 +98,7 @@ export const staking = () => {
 
     // get stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0}
     );
 
     // get balance before staking
@@ -125,7 +125,7 @@ export const staking = () => {
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
-      status: 1,
+      status: 0,
     });
 
     // get balance before staking
@@ -175,7 +175,7 @@ export const staking = () => {
 
     // refetch stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
 
     // get balance before staking
@@ -226,7 +226,7 @@ export const staking = () => {
 
     // refetch stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
     //check unbonding
     const unbondings =
@@ -281,7 +281,7 @@ export const staking = () => {
 
     // refetch stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
 
     // get balance before staking
@@ -332,7 +332,7 @@ export const staking = () => {
     pool = await getDefaultPool();
 
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
 
     const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
@@ -379,7 +379,7 @@ export const staking = () => {
 
     // get stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
 
     // check if staking amount is zero
@@ -405,7 +405,7 @@ export const staking = () => {
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
-      status: 1,
+      status: 0,
     });
 
     // check if stake went though
@@ -443,7 +443,7 @@ export const staking = () => {
 
     // get stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
 
     // check if staking amount is zero
@@ -472,7 +472,7 @@ export const staking = () => {
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
-      status: 1
+      status: 0
     });
     const unbondingsAlice =
       await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
