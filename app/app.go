@@ -1,14 +1,17 @@
 package app
 
 import (
-	v0_5_0 "github.com/KYVENetwork/chain/app/upgrades/v0.5.0"
+	v0_5_3 "github.com/KYVENetwork/chain/app/upgrades/v0.5.3"
+	v0_6_0 "github.com/KYVENetwork/chain/app/upgrades/v0.6.0"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 
+	v0_5_0 "github.com/KYVENetwork/chain/app/upgrades/v0.5.0"
+	v0_5_2 "github.com/KYVENetwork/chain/app/upgrades/v0.5.2"
+
 	v0_1_0 "github.com/KYVENetwork/chain/app/upgrades/v0.1.0"
-	v0_3_0 "github.com/KYVENetwork/chain/app/upgrades/v0.3.0"
 	v0_4_0 "github.com/KYVENetwork/chain/app/upgrades/v0.4.0"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -601,7 +604,9 @@ func GetMaccPerms() map[string][]string {
 
 func (app *App) setupUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(v0_1_0.UpgradeName, v0_1_0.CreateUpgradeHandler())
-	app.UpgradeKeeper.SetUpgradeHandler(v0_3_0.UpgradeName, v0_3_0.CreateUpgradeHandler(&app.RegistryKeeper))
 	app.UpgradeKeeper.SetUpgradeHandler(v0_4_0.UpgradeName, v0_4_0.CreateUpgradeHandler(&app.RegistryKeeper))
 	app.UpgradeKeeper.SetUpgradeHandler(v0_5_0.UpgradeName, v0_5_0.CreateUpgradeHandler(&app.GovKeeper, &app.RegistryKeeper, &app.TransferKeeper))
+	app.UpgradeKeeper.SetUpgradeHandler(v0_5_2.UpgradeName, v0_5_2.CreateUpgradeHandler(&app.GovKeeper, &app.RegistryKeeper))
+	app.UpgradeKeeper.SetUpgradeHandler(v0_5_3.UpgradeName, v0_5_3.CreateUpgradeHandler())
+	app.UpgradeKeeper.SetUpgradeHandler(v0_6_0.UpgradeName, v0_6_0.CreateUpgradeHandler(&app.RegistryKeeper))
 }

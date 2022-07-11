@@ -6,24 +6,18 @@ import (
 	"github.com/KYVENetwork/chain/x/registry/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 )
 
 var _ = strconv.Itoa(0)
 
-func CmdCanVote() *cobra.Command {
+func CmdAccountRedelegation() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "can-vote [id] [voter]",
-		Short: "Query canVote",
-		Args:  cobra.ExactArgs(3),
+		Use:   "account-redelegation [address]",
+		Short: "Query account-redelegation cooldown entries",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			reqId, err := cast.ToUint64E(args[0])
-			if err != nil {
-				return err
-			}
-			reqStorageId := args[1]
-			reqVoter := args[2]
+			reqAddress := args[0]
 
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -32,14 +26,11 @@ func CmdCanVote() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryCanVoteRequest{
-
-				PoolId:   reqId,
-				StorageId: reqStorageId,
-				Voter:    reqVoter,
+			params := &types.QueryAccountRedelegationRequest{
+				Address: reqAddress,
 			}
 
-			res, err := queryClient.CanVote(cmd.Context(), params)
+			res, err := queryClient.AccountRedelegation(cmd.Context(), params)
 			if err != nil {
 				return err
 			}

@@ -69,7 +69,7 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 		}
 
 		// Check if bundle needs to be dropped
-		if pool.BundleProposal.BundleId != "" && !strings.HasPrefix(pool.BundleProposal.BundleId, types.KYVE_NO_DATA_BUNDLE) {
+		if pool.BundleProposal.StorageId != "" && !strings.HasPrefix(pool.BundleProposal.StorageId, types.KYVE_NO_DATA_BUNDLE) {
 			// Check if quorum has already been reached.
 			valid := false
 			invalid := false
@@ -98,7 +98,7 @@ func (k Keeper) HandleUploadTimeout(goCtx context.Context) {
 				// If consensus wasn't reached, we drop the bundle and emit an event.
 				ctx.EventManager().EmitTypedEvent(&types.EventBundleFinalised{
 					PoolId:       pool.Id,
-					BundleId:     pool.BundleProposal.BundleId,
+					StorageId:     pool.BundleProposal.StorageId,
 					ByteSize:     pool.BundleProposal.ByteSize,
 					Uploader:     pool.BundleProposal.Uploader,
 					NextUploader: pool.BundleProposal.NextUploader,

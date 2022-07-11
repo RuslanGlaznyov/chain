@@ -54,16 +54,16 @@ func (k msgServer) VoteProposal(
 	}
 
 	// Check if bundle is not dropped or NO_DATA_BUNDLE
-	if pool.BundleProposal.BundleId == "" || strings.HasPrefix(pool.BundleProposal.BundleId, types.KYVE_NO_DATA_BUNDLE) {
+	if pool.BundleProposal.StorageId == "" || strings.HasPrefix(pool.BundleProposal.StorageId, types.KYVE_NO_DATA_BUNDLE) {
 		return nil, sdkErrors.Wrapf(
-			sdkErrors.ErrNotFound, types.ErrInvalidBundleId.Error(), pool.BundleProposal.BundleId,
+			sdkErrors.ErrNotFound, types.ErrInvalidStorageId.Error(), pool.BundleProposal.StorageId,
 		)
 	}
 
 	// Check if the sender is voting on the same bundle.
-	if msg.BundleId != pool.BundleProposal.BundleId {
+	if msg.StorageId != pool.BundleProposal.StorageId {
 		return nil, sdkErrors.Wrapf(
-			sdkErrors.ErrNotFound, types.ErrInvalidBundleId.Error(), pool.BundleProposal.BundleId,
+			sdkErrors.ErrNotFound, types.ErrInvalidStorageId.Error(), pool.BundleProposal.StorageId,
 		)
 	}
 
@@ -90,22 +90,22 @@ func (k msgServer) VoteProposal(
 
 	if hasVotedValid || hasVotedInvalid {
 		return nil, sdkErrors.Wrapf(
-			sdkErrors.ErrUnauthorized, types.ErrAlreadyVoted.Error(), pool.BundleProposal.BundleId,
+			sdkErrors.ErrUnauthorized, types.ErrAlreadyVoted.Error(), pool.BundleProposal.StorageId,
 		)
 	}
 
-	if hasVotedAbstain && msg.Vote == 2 {
+	if hasVotedAbstain && msg.Vote == types.VOTE_TYPE_ABSTAIN {
 		return nil, sdkErrors.Wrapf(
-			sdkErrors.ErrUnauthorized, types.ErrAlreadyVoted.Error(), pool.BundleProposal.BundleId,
+			sdkErrors.ErrUnauthorized, types.ErrAlreadyVoted.Error(), pool.BundleProposal.StorageId,
 		)
 	}
 
 	// Update and return.
-	if msg.Vote == 0 {
+	if msg.Vote == types.VOTE_TYPE_YES {
 		pool.BundleProposal.VotersValid = append(pool.BundleProposal.VotersValid, msg.Creator)
-	} else if msg.Vote == 1 {
+	} else if msg.Vote == types.VOTE_TYPE_NO {
 		pool.BundleProposal.VotersInvalid = append(pool.BundleProposal.VotersInvalid, msg.Creator)
-	} else if msg.Vote == 2 {
+	} else if msg.Vote == types.VOTE_TYPE_ABSTAIN {
 		pool.BundleProposal.VotersAbstain = append(pool.BundleProposal.VotersAbstain, msg.Creator)
 	} else {
 		return nil, sdkErrors.Wrapf(
@@ -121,7 +121,7 @@ func (k msgServer) VoteProposal(
 	err := ctx.EventManager().EmitTypedEvent(&types.EventBundleVote{
 		PoolId:   msg.Id,
 		Address:  msg.Creator,
-		BundleId: msg.BundleId,
+		StorageId: msg.StorageId,
 		Vote:     msg.Vote,
 	})
 	if err != nil {

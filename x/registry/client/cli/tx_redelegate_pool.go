@@ -13,18 +13,28 @@ import (
 
 var _ = strconv.Itoa(0)
 
-func CmdVoteProposal() *cobra.Command {
+func CmdRedelegatePool() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "vote-proposal [id] [bundle-id] [vote]",
-		Short: "Broadcast message vote-proposal",
-		Args:  cobra.ExactArgs(3),
+		Use:   "redelegate-pool [from_pool_id] [from_staker] [to_pool_id] [to_staker] [amount]",
+		Short: "Broadcast message redelegate-pool",
+		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argId, err := cast.ToUint64E(args[0])
+
+			fromPoolId, err := cast.ToUint64E(args[0])
 			if err != nil {
 				return err
 			}
-			argStorageId := args[1]
-			argVote, err := cast.ToUint64E(args[2])
+
+			fromStaker := args[1]
+
+			toPoolId, err := cast.ToUint64E(args[2])
+			if err != nil {
+				return err
+			}
+
+			toStaker := args[3]
+
+			amount, err := cast.ToUint64E(args[4])
 			if err != nil {
 				return err
 			}
@@ -34,12 +44,14 @@ func CmdVoteProposal() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgVoteProposal(
-				clientCtx.GetFromAddress().String(),
-				argId,
-				argStorageId,
-				types.VoteType(argVote),
-			)
+			msg := &types.MsgRedelegatePool{
+				Creator:    clientCtx.GetFromAddress().String(),
+				FromPoolId: fromPoolId,
+				FromStaker: fromStaker,
+				ToPoolId:   toPoolId,
+				ToStaker:   toStaker,
+				Amount:     amount,
+			}
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

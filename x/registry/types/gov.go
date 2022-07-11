@@ -11,6 +11,7 @@ const (
 	ProposalTypeUnpausePool = "UnpausePool"
 	ProposalTypeSchedulePoolUpgrade = "SchedulePoolUpgrade"
 	ProposalTypeCancelPoolUpgrade = "CancelPoolUpgrade"
+	ProposalTypeResetPool = "ResetPool"
 )
 
 func init() {
@@ -26,6 +27,8 @@ func init() {
 	govtypes.RegisterProposalTypeCodec(&SchedulePoolUpgradeProposal{}, "kyve/SchedulePoolUpgradeProposal")
 	govtypes.RegisterProposalType(ProposalTypeCancelPoolUpgrade)
 	govtypes.RegisterProposalTypeCodec(&CancelPoolUpgradeProposal{}, "kyve/CancelPoolUpgradeProposal")
+	govtypes.RegisterProposalType(ProposalTypeResetPool)
+	govtypes.RegisterProposalTypeCodec(&ResetPoolProposal{}, "kyve/ResetPoolProposal")
 }
 
 var (
@@ -35,6 +38,7 @@ var (
 	_ govtypes.Content = &UnpausePoolProposal{}
 	_ govtypes.Content = &SchedulePoolUpgradeProposal{}
 	_ govtypes.Content = &CancelPoolUpgradeProposal{}
+	_ govtypes.Content = &ResetPoolProposal{}
 )
 
 func NewCreatePoolProposal(title string, description string, name string, runtime string, logo string, config string, startHeight uint64, uploadInterval uint64, operatingCost uint64, maxBundleSize uint64, version string, binaries string) govtypes.Content {
@@ -187,6 +191,30 @@ func (p *CancelPoolUpgradeProposal) ProposalType() string {
 }
 
 func (p *CancelPoolUpgradeProposal) ValidateBasic() error {
+	err := govtypes.ValidateAbstract(p)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewResetPoolProposal(title string, description string, id uint64, bundleId uint64) govtypes.Content {
+	return &ResetPoolProposal{
+		Title:       title,
+		Description: description,
+		Id:          id,
+		BundleId: bundleId,
+	}
+}
+
+func (p *ResetPoolProposal) ProposalRoute() string { return RouterKey }
+
+func (p *ResetPoolProposal) ProposalType() string {
+	return ProposalTypeUnpausePool
+}
+
+func (p *ResetPoolProposal) ValidateBasic() error {
 	err := govtypes.ValidateAbstract(p)
 	if err != nil {
 		return err

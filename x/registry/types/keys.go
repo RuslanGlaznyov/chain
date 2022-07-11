@@ -29,51 +29,6 @@ const (
 	KYVE_NO_DATA_BUNDLE = "KYVE_NO_DATA_BUNDLE"
 )
 
-// ========== EVENTS ===================
-// general event props
-const (
-	EventName    = "EventName"
-	EventPoolId  = "PoolId"
-	EventCreator = "Creator"
-	EventAmount  = "Amount"
-)
-
-// voting
-const (
-	VoteEventKey      = "Voted"
-	VoteEventBundleId = "BundleId"
-	VoteEventVote     = "Vote"
-)
-
-// slashing
-const (
-	SlashEventKey = "ReceivedSlash"
-	SlashAccount  = "Account"
-)
-
-// Activity
-const (
-	ProposalEventKey          = "ProposalEnded"
-	ProposalEventBundleId     = "BundleId"
-	ProposalEventByteSize     = "ByteSize"
-	ProposalEventUploader     = "Uploader"
-	ProposalEventNextUploader = "NextUploader"
-	ProposalEventReward       = "BundleReward"
-	ProposalEventValid        = "Valid"
-	ProposalEventInvalid      = "Invalid"
-	ProposalEventFromHeight   = "FromHeight"
-	ProposalEventToHeight     = "ToHeight"
-	ProposalEventStatus       = "Status"
-)
-
-const (
-	UpdateMetadataEventKey   = "UpdateMetadata"
-	UpdateMetadataCommission = "Commission"
-	UpdateMetadataMoniker    = "Moniker"
-	UpdateMetadataWebsite    = "Website"
-	UpdateMetadataLogo       = "Logo"
-)
-
 // ============ KV-STORE ===============
 
 func KeyPrefix(p string) []byte {
@@ -127,6 +82,9 @@ var (
 	UnbondingDelegationQueueEntryKeyPrefix = []byte{12}
 	// UnbondingDelegationQueueEntryKeyPrefixIndex2 ...
 	UnbondingDelegationQueueEntryKeyPrefixIndex2 = []byte{13}
+
+	// RedelegationCooldownPrefix ...
+	RedelegationCooldownPrefix = []byte{14}
 )
 
 // StakerKey returns the store Key to retrieve a Staker from the index fields
@@ -164,13 +122,13 @@ func DelegationPoolDataKey(poolId uint64, stakerAddress string) []byte {
 // === PROPOSALS ===
 
 // ProposalKey returns the store Key to retrieve a Proposal from the index fields
-func ProposalKey(bundleId string) []byte {
-	return KeyPrefixBuilder{}.AString(bundleId).Key
+func ProposalKey(storageId string) []byte {
+	return KeyPrefixBuilder{}.AString(storageId).Key
 }
 
 // ProposalKeyIndex2 ...
-func ProposalKeyIndex2(poolId uint64, fromId uint64) []byte {
-	return KeyPrefixBuilder{}.AInt(poolId).AInt(fromId).Key
+func ProposalKeyIndex2(poolId uint64, id uint64) []byte {
+	return KeyPrefixBuilder{}.AInt(poolId).AInt(id).Key
 }
 
 // ProposalKeyIndex3 ...
@@ -196,6 +154,10 @@ func UnbondingDelegationQueueEntryKey(index uint64) []byte {
 }
 func UnbondingDelegationQueueEntryKeyIndex2(delegator string, index uint64) []byte {
 	return KeyPrefixBuilder{}.AString(delegator).AInt(index).Key
+}
+
+func RedelegationCooldownKey(delegator string, block uint64) []byte {
+	return KeyPrefixBuilder{}.AString(delegator).AInt(block).Key
 }
 
 type KeyPrefixBuilder struct {

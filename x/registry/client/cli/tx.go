@@ -41,6 +41,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdDelegatePool())
 	cmd.AddCommand(CmdWithdrawPool())
 	cmd.AddCommand(CmdUndelegatePool())
+	cmd.AddCommand(CmdRedelegatePool())
 	cmd.AddCommand(CmdUpdateMetadata())
 
 	cmd.AddCommand(CmdSubmitCreatePoolProposal())
@@ -49,6 +50,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdSubmitUnpausePoolProposal())
 	cmd.AddCommand(CmdSubmitSchedulePoolUpgradeProposal())
 	cmd.AddCommand(CmdSubmitCancelPoolUpgradeProposal())
+	cmd.AddCommand(CmdSubmitResetPoolProposal())
 
 	return cmd
 }
@@ -456,6 +458,78 @@ func CmdSubmitCancelPoolUpgradeProposal() *cobra.Command {
 			}
 
 			content := types.NewCancelPoolUpgradeProposal(title, description, args[0])
+
+			isExpedited, err := cmd.Flags().GetBool(cli.FlagIsExpedited)
+			if err != nil {
+				return err
+			}
+
+			msg, err := govtypes.NewMsgSubmitProposal(content, deposit, from, isExpedited)
+			if err != nil {
+				return err
+			}
+
+			if err = msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	cmd.Flags().String(cli.FlagTitle, "", "The proposal title")
+	cmd.Flags().String(cli.FlagDescription, "", "The proposal description")
+	cmd.Flags().Bool(cli.FlagIsExpedited, false, "If true, makes the proposal an expedited one")
+	cmd.Flags().String(cli.FlagDeposit, "", "The proposal deposit")
+	_ = cmd.MarkFlagRequired(cli.FlagTitle)
+	_ = cmd.MarkFlagRequired(cli.FlagDescription)
+
+	return cmd
+}
+
+func CmdSubmitResetPoolProposal() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "reset-pool [flags]",
+		Args:  cobra.ExactArgs(2),
+		Short: "Submit a proposal to reset a pool to a specific bundle.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			argId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			argBundleId, err := strconv.ParseUint(args[1], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			title, err := cmd.Flags().GetString(cli.FlagTitle)
+			if err != nil {
+				return err
+			}
+
+			description, err := cmd.Flags().GetString(cli.FlagDescription)
+			if err != nil {
+				return err
+			}
+
+			from := clientCtx.GetFromAddress()
+
+			depositStr, err := cmd.Flags().GetString(cli.FlagDeposit)
+			if err != nil {
+				return err
+			}
+			deposit, err := sdk.ParseCoinsNormalized(depositStr)
+			if err != nil {
+				return err
+			}
+
+			content := types.NewResetPoolProposal(title, description, argId, argBundleId)
 
 			isExpedited, err := cmd.Flags().GetBool(cli.FlagIsExpedited)
 			if err != nil {

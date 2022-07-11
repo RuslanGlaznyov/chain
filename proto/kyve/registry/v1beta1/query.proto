@@ -55,7 +55,7 @@ service Query {
 
   // Proposal ...
   rpc Proposal(QueryProposalRequest) returns (QueryProposalResponse) {
-    option (google.api.http).get = "/kyve/registry/v1beta1/proposal/{bundle_id}";
+    option (google.api.http).get = "/kyve/registry/v1beta1/proposal/{storage_id}";
   }
 
   // Proposals ...
@@ -69,9 +69,14 @@ service Query {
     option (google.api.http).get = "/kyve/registry/v1beta1/proposal_by_height/{pool_id}/{height}";
   }
 
-  // ProposalByHeight ...
+  // ProposalSinceFinalizedAt ...
   rpc ProposalSinceFinalizedAt(QueryProposalSinceFinalizedAtRequest) returns (QueryProposalSinceFinalizedAtResponse) {
     option (google.api.http).get = "/kyve/registry/v1beta1/proposal_since_finalized_at/{pool_id}/{finalized_at}";
+  }
+
+  // ProposalSinceId ...
+  rpc ProposalSinceId(QueryProposalSinceIdRequest) returns (QueryProposalSinceIdResponse) {
+    option (google.api.http).get = "/kyve/registry/v1beta1/proposal_since_id/{pool_id}/{id}";
   }
 
   // PROTOCOL NODE - FLOW
@@ -83,7 +88,7 @@ service Query {
 
   // CanVote checks if voter on pool can still vote for the given bundle
   rpc CanVote(QueryCanVoteRequest) returns (QueryCanVoteResponse) {
-    option (google.api.http).get = "/kyve/registry/v1beta1/can_vote/{pool_id}/{voter}/{bundle_id}";
+    option (google.api.http).get = "/kyve/registry/v1beta1/can_vote/{pool_id}/{voter}/{storage_id}";
   }
 
   // StakeInfo returns necessary information to become a staker (used by the protocol nodes)
@@ -121,6 +126,11 @@ service Query {
   // AccountDelegationList ...
   rpc AccountDelegationList(QueryAccountDelegationListRequest) returns (QueryAccountDelegationListResponse) {
     option (google.api.http).get = "/kyve/registry/v1beta1/account_delegation_list/{address}";
+  }
+
+  // AccountRedelegation ...
+  rpc AccountRedelegation(QueryAccountRedelegationRequest) returns (QueryAccountRedelegationResponse) {
+    option (google.api.http).get = "/kyve/registry/v1beta1/account_redelegation/{address}";
   }
 
   // DELEGATION
@@ -276,8 +286,8 @@ message StakerResponse {
 
 // QueryProposalRequest is the request type for the Query/Proposal RPC method.
 message QueryProposalRequest {
-  // bundle_id ...
-  string bundle_id = 1;
+  // storage_id ...
+  string storage_id = 1;
 }
 
 // QueryProposalResponse is the response type for the Query/Proposal RPC method.
@@ -334,6 +344,24 @@ message QueryProposalSinceFinalizedAtResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+// QueryProposalSinceIdRequest ...
+message QueryProposalSinceIdRequest {
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  // pool_id ...
+  uint64 pool_id = 2;
+  // height ...
+  uint64 id = 3;
+}
+
+// QueryProposalSinceIdResponse ...
+message QueryProposalSinceIdResponse {
+  // proposal ...
+  repeated kyve.registry.v1beta1.Proposal proposals = 1 [(gogoproto.nullable) = false];
+  // pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
 // PROTOCOL NODE - FLOW
 
 // QueryCanProposeRequest is the request type for the Query/CanPropose RPC method.
@@ -360,8 +388,8 @@ message QueryCanVoteRequest {
   uint64 pool_id = 1;
   // voter ...
   string voter = 2;
-  // bundle_id ...
-  string bundle_id = 3;
+  // storage_id ...
+  string storage_id = 3;
 }
 
 // QueryCanVoteResponse is the response type for the Query/CanVote RPC method.
@@ -562,6 +590,18 @@ message DelegatorResponse {
   string staker = 5;
   // delegation_pool_data ...
   kyve.registry.v1beta1.DelegationPoolData delegation_pool_data = 6;
+}
+
+// QueryAccountDelegationListRequest ...
+message QueryAccountRedelegationRequest {
+  // address ...
+  string address = 1;
+}
+
+// QueryAccountDelegationListRequest is the response type for the Query/AccountDelegationList RPC method.
+message QueryAccountRedelegationResponse {
+  // redelegation_cooldown_entries ...
+  repeated uint64 redelegation_cooldown_entries = 1 [(gogoproto.nullable) = false];
 }
 
 // ######################
