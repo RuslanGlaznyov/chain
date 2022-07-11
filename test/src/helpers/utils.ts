@@ -54,7 +54,7 @@ export const restartChain = () => {
         await startChain();
         global.chain.removeAllListeners("close");
         resolve(global.chain);
-      }, 1000);
+      }, 10000);
     });
     global.chain.kill();
   });
