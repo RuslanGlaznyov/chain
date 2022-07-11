@@ -125,7 +125,7 @@ export const staking = () => {
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
-      status: 0,
+      status: 2,
     });
 
     // get balance before staking
