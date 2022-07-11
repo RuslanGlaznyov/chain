@@ -66,7 +66,7 @@ export const staking = () => {
     await expect(request).rejects.toThrow(/insufficient funds/);
     // refetch pool
     pool = await getDefaultPool();
-
+    await sleep(3000)
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
@@ -121,7 +121,7 @@ export const staking = () => {
 
     // refetch pool
     pool = await getDefaultPool();
-
+    await sleep(3000)
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
@@ -166,7 +166,6 @@ export const staking = () => {
       id: pool.id,
       amount: amount.toString(),
     }).then(tx => tx.execute());
-
     // 0 means transaction was successful
     expect(receipt.code).toEqual(0);
 
@@ -174,6 +173,7 @@ export const staking = () => {
     pool = await getDefaultPool();
 
     // refetch stakers list
+    await sleep(3000)
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
       { pool_id: "0", status: 0 }
     );
@@ -219,12 +219,13 @@ export const staking = () => {
     // 0 means transaction was successful
     expect(receipt.code).toEqual(0);
 
-    await sleep(10000);
+
 
     // refetch pool
     pool = await getDefaultPool();
 
     // refetch stakers list
+    await sleep(3000);
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
       { pool_id: "0", status: 0 }
     );
@@ -278,7 +279,7 @@ export const staking = () => {
 
     // refetch pool
     pool = await getDefaultPool();
-
+    await sleep(3000)
     // refetch stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
       { pool_id: "0", status: 0 }
@@ -326,11 +327,10 @@ export const staking = () => {
     // 0 means transaction was successful
     expect(receipt.code).toEqual(0);
 
-    await sleep(10000);
 
     // refetch pool
     pool = await getDefaultPool();
-
+    await sleep(3000)
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
       { pool_id: "0", status: 0 }
     );
@@ -378,6 +378,7 @@ export const staking = () => {
     let pool = await getDefaultPool();
 
     // get stakers list
+    await sleep(3000)
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
       { pool_id: "0", status: 0 }
     );
@@ -403,6 +404,7 @@ export const staking = () => {
     pool = await getDefaultPool();
 
     // refetch stakers list
+    await sleep(3000)
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
       status: 0,
@@ -442,6 +444,7 @@ export const staking = () => {
     let pool = await getDefaultPool();
 
     // get stakers list
+    await sleep(3000)
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
       { pool_id: "0", status: 0 }
     );

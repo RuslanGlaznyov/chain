@@ -24,7 +24,6 @@ export const funding = () => {
     await alice.init();
     await bob.init();
     await charlie.init();
-    await sleep(5000)
   });
   jest.setTimeout(24 * 60 * 60 * 1000);
 
