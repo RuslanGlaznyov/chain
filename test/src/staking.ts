@@ -121,7 +121,7 @@ export const staking = () => {
 
     // refetch pool
     pool = await getDefaultPool();
-    await sleep(50000)
+    // await sleep(50000)
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
