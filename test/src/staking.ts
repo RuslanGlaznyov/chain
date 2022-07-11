@@ -121,7 +121,7 @@ export const staking = () => {
 
     // refetch pool
     pool = await getDefaultPool();
-    await sleep(10000)
+    await sleep(50000)
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
@@ -130,7 +130,6 @@ export const staking = () => {
 
     // get balance before staking
     const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-
     // check if stake went though
     expect(pool.stakers).toHaveLength(1);
     expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
