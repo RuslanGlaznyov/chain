@@ -38,9 +38,6 @@ jobs:
       - name: install dependency
         run: yarn install --frozen-lockfile
         working-directory: ./chain/test
-      - name: upgrade @kyve/sdk
-        run: yarn upgrade @kyve/sdk
-        working-directory: ./chain/test
       - name: run tests
         run: yarn test
         working-directory: ./chain/test
