@@ -51,7 +51,7 @@ export const funding = () => {
     expect(pool.total_funds).toEqual("0");
     expect(pool.lowest_funder).toBe("");
 
-    const request = alice.client.kyve.v1beta1.base.foundPool({
+    const request = alice.client.kyve.v1beta1.base.fundPool({
       amount: amount.toString(),
       id: pool.id,
     }).then(tx => tx.execute());
@@ -100,7 +100,7 @@ export const funding = () => {
     expect(pool.lowest_funder).toBe("");
 
     // fund 80 KYVE
-    const receipt = await alice.client.kyve.v1beta1.base.foundPool({
+    const receipt = await alice.client.kyve.v1beta1.base.fundPool({
       amount: amount.toString(),
       id: pool.id,
     }).then(tx => tx.execute());
@@ -153,7 +153,7 @@ export const funding = () => {
     const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
 
     // fund 100 KYVE
-    const receipt = await alice.client.kyve.v1beta1.base.foundPool({
+    const receipt = await alice.client.kyve.v1beta1.base.fundPool({
       id: pool.id,
       amount: amount.toString(),
     }).then(tx => tx.execute());
@@ -357,19 +357,19 @@ export const funding = () => {
     expect(pool.total_funds).toEqual("0");
 
     // fund alice
-    await alice.client.kyve.v1beta1.base.foundPool({
+    await alice.client.kyve.v1beta1.base.fundPool({
       id: pool.id,
       amount: aliceAmount.toString(),
     }).then(tx => tx.execute());
 
     // fund bob
-    await bob.client.kyve.v1beta1.base.foundPool({
+    await bob.client.kyve.v1beta1.base.fundPool({
       id: pool.id,
       amount: bobAmount.toString(),
     }).then(tx => tx.execute());
 
     // fund charlie
-    await charlie.client.kyve.v1beta1.base.foundPool({
+    await charlie.client.kyve.v1beta1.base.fundPool({
       id: pool.id,
       amount: charlieAmount.toString(),
     }).then(tx => tx.execute());
