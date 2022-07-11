@@ -121,7 +121,7 @@ export const staking = () => {
 
     // refetch pool
     pool = await getDefaultPool();
-    await sleep(3000)
+    await sleep(10000)
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
@@ -144,372 +144,372 @@ export const staking = () => {
     expect(new BigNumber(preBalance).minus(postBalance)).toEqual(amount);
   });
 
-  test("stake additional 20 KYVE with alice", async () => {
-    // define amount
-    const amount = new BigNumber(20).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const total = new BigNumber(100).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-
-    // get default pool
-    let pool = await getDefaultPool();
-
-    // get stakers list
-
-    // get balance before staking
-    const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-
-    // stake 100 KYVE
-    const receipt = await alice.client.kyve.v1beta1.base.stakePool({
-      id: pool.id,
-      amount: amount.toString(),
-    }).then(tx => tx.execute());
-    // 0 means transaction was successful
-    expect(receipt.code).toEqual(0);
-
-    // refetch pool
-    pool = await getDefaultPool();
-
-    // refetch stakers list
-    await sleep(3000)
-    let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 0 }
-    );
-
-    // get balance before staking
-    const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-
-    // check if stake went though
-    expect(pool.stakers).toHaveLength(1);
-    expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
-    expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
-
-    expect(stakersListResponse.stakers).toHaveLength(1);
-    expect(stakersListResponse.stakers[0].amount).toEqual(total.toString());
-
-    expect(pool.total_stake).toEqual(total.toString());
-
-    // check if balance was decreased correct
-    expect(new BigNumber(preBalance).minus(postBalance)).toEqual(amount);
-  });
-
-  test("unstake 80 KYVE with alice", async () => {
-    // define amount
-    const amount = new BigNumber(80).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const remaining = new BigNumber(20).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-
-    // get default pool
-    let pool = await getDefaultPool();
-
-    // get balance before staking
-    const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-
-    // unstake 80 KYVE
-    const receipt = await alice.client.kyve.v1beta1.base.unstakePool({
-      id: pool.id,
-      amount: amount.toString(),
-    }).then(tx => tx.execute());
-
-    // 0 means transaction was successful
-    expect(receipt.code).toEqual(0);
-
-
-
-    // refetch pool
-    pool = await getDefaultPool();
-
-    // refetch stakers list
-    await sleep(3000);
-    let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 0 }
-    );
-    //check unbonding
-    const unbondings =
-      await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
-        address: ADDRESS_ALICE,
-      });
-    // get balance before staking
-    const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-    const unbondingsTotal = unbondings.unbondings.reduce(
-      (acc, cur) => acc.plus(cur.amount.toString()),
-      new BigNumber(0)
-    );
-    // check if stake went though
-    expect(pool.stakers).toHaveLength(1);
-    expect(stakersListResponse.stakers).toHaveLength(1);
-
-    expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
-    expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
-    expect(unbondingsTotal.toString()).toEqual(amount.toString());
-    expect(stakersListResponse.stakers).toHaveLength(1);
-    expect(stakersListResponse.stakers[0].unbonding_amount).toEqual(
-      amount.toString()
-    );
-    expect(pool.total_stake).toEqual(amount.plus(remaining).toString());
-    expect(postBalance.toString()).toEqual(preBalance.toString());
-  });
-
-  test("unstake more than staking balance with alice", async () => {
-    // define amount
-    const amount = new BigNumber(50).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const remaining = new BigNumber(100).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-
-    // get default pool
-    let pool = await getDefaultPool();
-
-    // get balance before staking
-    const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-
-    // unstake 50 KYVE
-    const request = alice.client.kyve.v1beta1.base.unstakePool({
-      id: pool.id,
-      amount: amount.toString(),
-    }).then(tx => tx.execute());
-    await expect(request).rejects.toThrow(/maximum unstaking amount/);
-
-    // refetch pool
-    pool = await getDefaultPool();
-    await sleep(3000)
-    // refetch stakers list
-    let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 0 }
-    );
-
-    // get balance before staking
-    const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-
-    // check if stake went though
-    expect(pool.stakers).toHaveLength(1);
-    expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
-    expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
-
-    expect(stakersListResponse.stakers).toHaveLength(1);
-    expect(stakersListResponse.stakers[0].amount).toEqual(remaining.toString());
-
-    expect(pool.total_stake).toEqual(remaining.toString());
-
-    // check if balance was decreased correct
-    expect(postBalance).toEqual(preBalance);
-  });
-
-  test("unstake all with alice", async () => {
-    // define amount
-    const unstake = new BigNumber(20).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const totalStaked = new BigNumber(100).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-
-    // get default pool
-    let pool = await getDefaultPool();
-
-    // get balance before staking
-    const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-
-    // unstake 20 KYVE
-    //const { transactionBroadcast } = await alice.unstake(pool.id, amount);
-    const receipt = await alice.client.kyve.v1beta1.base.unstakePool({
-      id: pool.id,
-      amount: unstake.toString(),
-    }).then(tx => tx.execute());
-
-    // 0 means transaction was successful
-    expect(receipt.code).toEqual(0);
-
-
-    // refetch pool
-    pool = await getDefaultPool();
-    await sleep(3000)
-    let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 0 }
-    );
-
-    const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
-    //check unbonding
-    const unbondings =
-      await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
-        address: ADDRESS_ALICE,
-      });
-    const unbondingsTotal = unbondings.unbondings.reduce(
-      (acc, cur) => acc.plus(cur.amount.toString()),
-      new BigNumber(0)
-    );
-
-    // check if stake went though
-    expect(unbondingsTotal.toString()).toEqual(totalStaked.toString());
-    expect(pool.stakers).toHaveLength(1);
-    expect(stakersListResponse.stakers).toHaveLength(1);
-    expect(stakersListResponse.stakers[0].unbonding_amount).toEqual(
-      totalStaked.toString()
-    );
-    expect(pool.total_stake).toEqual(totalStaked.toString());
-    expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
-    // check if balance was  correct
-    expect(postBalance).toEqual(preBalance);
-  });
-
-  test("stake with multiple stakers", async () => {
-    // define amounts
-    const totalStaked = new BigNumber(100).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const aliceAmount = new BigNumber(200).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const bobAmount = new BigNumber(100).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const charlieAmount = new BigNumber(300).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-
-    // get default pool
-    let pool = await getDefaultPool();
-
-    // get stakers list
-    await sleep(3000)
-    let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 0 }
-    );
-
-    // check if staking amount is zero
-    expect(pool.stakers).toHaveLength(1);
-    expect(stakersListResponse.stakers).toHaveLength(1);
-    expect(pool.total_stake).toEqual(totalStaked.toString());
-
-    await alice.client.kyve.v1beta1.base.stakePool({
-      id: pool.id,
-      amount: aliceAmount.toString(),
-    }).then(tx => tx.execute());
-    await bob.client.kyve.v1beta1.base.stakePool({
-      id: pool.id,
-      amount: bobAmount.toString(),
-    }).then(tx => tx.execute());
-    await charlie.client.kyve.v1beta1.base.stakePool({
-      id: pool.id,
-      amount: charlieAmount.toString(),
-    }).then(tx => tx.execute());
-    // refetch pool
-    pool = await getDefaultPool();
-
-    // refetch stakers list
-    await sleep(3000)
-    stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
-      pool_id: "0",
-      status: 0,
-    });
-
-    // check if stake went though
-    expect(pool.stakers).toHaveLength(3);
-    expect(pool.stakers).toContain(ADDRESS_ALICE);
-    expect(pool.stakers).toContain(ADDRESS_BOB);
-    expect(pool.stakers).toContain(ADDRESS_CHARLIE);
-    expect(pool.lowest_staker).toBe(ADDRESS_BOB);
-
-    expect(stakersListResponse.stakers).toHaveLength(3);
-
-    expect(pool.total_stake).toEqual(
-      totalStaked
-        .plus(aliceAmount)
-        .plus(bobAmount)
-        .plus(charlieAmount)
-        .toString()
-    );
-  });
-
-  test("unstake with multiple stakers", async () => {
-    // define amounts
-    const totalStaked = new BigNumber(700).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const totalUnbonding = new BigNumber(100).multipliedBy(
-      10 ** constants.KYVE_DECIMALS
-    );
-    const aliceAmount = new BigNumber(200).multipliedBy(10 ** 9);
-    const bobAmount = new BigNumber(100).multipliedBy(10 ** 9);
-    const charlieAmount = new BigNumber(300).multipliedBy(10 ** 9);
-
-    // get default pool
-    let pool = await getDefaultPool();
-
-    // get stakers list
-    await sleep(3000)
-    let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 0 }
-    );
-
-    // check if staking amount is zero
-    expect(pool.stakers).toHaveLength(3);
-    expect(stakersListResponse.stakers).toHaveLength(3);
-    expect(pool.total_stake).toEqual(totalStaked.toString());
-
-    await alice.client.kyve.v1beta1.base.unstakePool({
-      id: pool.id,
-      amount: aliceAmount.toString(),
-    }).then(tx => tx.execute());
-    await bob.client.kyve.v1beta1.base.unstakePool({
-      id: pool.id,
-      amount: bobAmount.toString(),
-    }).then(tx => tx.execute());
-    await charlie.client.kyve.v1beta1.base.unstakePool({
-      id: pool.id,
-      amount: charlieAmount.toString(),
-    }).then(tx => tx.execute());
-
-    await sleep(10000);
-
-    // refetch pool
-    pool = await getDefaultPool();
-
-    // refetch stakers list
-    stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
-      pool_id: "0",
-      status: 0
-    });
-    const unbondingsAlice =
-      await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
-        address: ADDRESS_ALICE,
-      });
-    const unbondingsBob =
-      await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
-        address: ADDRESS_BOB,
-      });
-    const unbondingsCharlie =
-      await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
-        address: ADDRESS_CHARLIE,
-      });
-    const unbondingsTotalAlice = unbondingsAlice.unbondings.reduce(
-      (acc, cur) => acc.plus(cur.amount.toString()),
-      new BigNumber(0)
-    );
-    const unbondingsTotalBob = unbondingsBob.unbondings.reduce(
-      (acc, cur) => acc.plus(cur.amount.toString()),
-      new BigNumber(0)
-    );
-    const unbondingsTotalCharlie = unbondingsCharlie.unbondings.reduce(
-      (acc, cur) => acc.plus(cur.amount.toString()),
-      new BigNumber(0)
-    );
-    expect(stakersListResponse.stakers).toHaveLength(3);
-
-    // check if stake went though
-    expect(pool.stakers).toHaveLength(3);
-    expect(pool.total_stake).toEqual(totalStaked.toString());
-    expect(unbondingsTotalAlice.toString()).toEqual(
-      totalUnbonding.plus(aliceAmount).toString()
-    );
-    expect(unbondingsTotalBob.toString()).toEqual(bobAmount.toString());
-    expect(unbondingsTotalCharlie.toString()).toEqual(charlieAmount.toString());
-  });
+  // test("stake additional 20 KYVE with alice", async () => {
+  //   // define amount
+  //   const amount = new BigNumber(20).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const total = new BigNumber(100).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //
+  //   // get default pool
+  //   let pool = await getDefaultPool();
+  //
+  //   // get stakers list
+  //
+  //   // get balance before staking
+  //   const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
+  //
+  //   // stake 100 KYVE
+  //   const receipt = await alice.client.kyve.v1beta1.base.stakePool({
+  //     id: pool.id,
+  //     amount: amount.toString(),
+  //   }).then(tx => tx.execute());
+  //   // 0 means transaction was successful
+  //   expect(receipt.code).toEqual(0);
+  //
+  //   // refetch pool
+  //   pool = await getDefaultPool();
+  //
+  //   // refetch stakers list
+  //   await sleep(3000)
+  //   let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
+  //     { pool_id: "0", status: 0 }
+  //   );
+  //
+  //   // get balance before staking
+  //   const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
+  //
+  //   // check if stake went though
+  //   expect(pool.stakers).toHaveLength(1);
+  //   expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
+  //   expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
+  //
+  //   expect(stakersListResponse.stakers).toHaveLength(1);
+  //   expect(stakersListResponse.stakers[0].amount).toEqual(total.toString());
+  //
+  //   expect(pool.total_stake).toEqual(total.toString());
+  //
+  //   // check if balance was decreased correct
+  //   expect(new BigNumber(preBalance).minus(postBalance)).toEqual(amount);
+  // });
+  //
+  // test("unstake 80 KYVE with alice", async () => {
+  //   // define amount
+  //   const amount = new BigNumber(80).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const remaining = new BigNumber(20).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //
+  //   // get default pool
+  //   let pool = await getDefaultPool();
+  //
+  //   // get balance before staking
+  //   const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
+  //
+  //   // unstake 80 KYVE
+  //   const receipt = await alice.client.kyve.v1beta1.base.unstakePool({
+  //     id: pool.id,
+  //     amount: amount.toString(),
+  //   }).then(tx => tx.execute());
+  //
+  //   // 0 means transaction was successful
+  //   expect(receipt.code).toEqual(0);
+  //
+  //
+  //
+  //   // refetch pool
+  //   pool = await getDefaultPool();
+  //
+  //   // refetch stakers list
+  //   await sleep(3000);
+  //   let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
+  //     { pool_id: "0", status: 0 }
+  //   );
+  //   //check unbonding
+  //   const unbondings =
+  //     await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
+  //       address: ADDRESS_ALICE,
+  //     });
+  //   // get balance before staking
+  //   const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
+  //   const unbondingsTotal = unbondings.unbondings.reduce(
+  //     (acc, cur) => acc.plus(cur.amount.toString()),
+  //     new BigNumber(0)
+  //   );
+  //   // check if stake went though
+  //   expect(pool.stakers).toHaveLength(1);
+  //   expect(stakersListResponse.stakers).toHaveLength(1);
+  //
+  //   expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
+  //   expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
+  //   expect(unbondingsTotal.toString()).toEqual(amount.toString());
+  //   expect(stakersListResponse.stakers).toHaveLength(1);
+  //   expect(stakersListResponse.stakers[0].unbonding_amount).toEqual(
+  //     amount.toString()
+  //   );
+  //   expect(pool.total_stake).toEqual(amount.plus(remaining).toString());
+  //   expect(postBalance.toString()).toEqual(preBalance.toString());
+  // });
+  //
+  // test("unstake more than staking balance with alice", async () => {
+  //   // define amount
+  //   const amount = new BigNumber(50).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const remaining = new BigNumber(100).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //
+  //   // get default pool
+  //   let pool = await getDefaultPool();
+  //
+  //   // get balance before staking
+  //   const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
+  //
+  //   // unstake 50 KYVE
+  //   const request = alice.client.kyve.v1beta1.base.unstakePool({
+  //     id: pool.id,
+  //     amount: amount.toString(),
+  //   }).then(tx => tx.execute());
+  //   await expect(request).rejects.toThrow(/maximum unstaking amount/);
+  //
+  //   // refetch pool
+  //   pool = await getDefaultPool();
+  //   await sleep(3000)
+  //   // refetch stakers list
+  //   let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
+  //     { pool_id: "0", status: 0 }
+  //   );
+  //
+  //   // get balance before staking
+  //   const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
+  //
+  //   // check if stake went though
+  //   expect(pool.stakers).toHaveLength(1);
+  //   expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
+  //   expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
+  //
+  //   expect(stakersListResponse.stakers).toHaveLength(1);
+  //   expect(stakersListResponse.stakers[0].amount).toEqual(remaining.toString());
+  //
+  //   expect(pool.total_stake).toEqual(remaining.toString());
+  //
+  //   // check if balance was decreased correct
+  //   expect(postBalance).toEqual(preBalance);
+  // });
+  //
+  // test("unstake all with alice", async () => {
+  //   // define amount
+  //   const unstake = new BigNumber(20).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const totalStaked = new BigNumber(100).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //
+  //   // get default pool
+  //   let pool = await getDefaultPool();
+  //
+  //   // get balance before staking
+  //   const preBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
+  //
+  //   // unstake 20 KYVE
+  //   //const { transactionBroadcast } = await alice.unstake(pool.id, amount);
+  //   const receipt = await alice.client.kyve.v1beta1.base.unstakePool({
+  //     id: pool.id,
+  //     amount: unstake.toString(),
+  //   }).then(tx => tx.execute());
+  //
+  //   // 0 means transaction was successful
+  //   expect(receipt.code).toEqual(0);
+  //
+  //
+  //   // refetch pool
+  //   pool = await getDefaultPool();
+  //   await sleep(3000)
+  //   let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
+  //     { pool_id: "0", status: 0 }
+  //   );
+  //
+  //   const postBalance = await alice.client.kyve.v1beta1.base.getKyveBalance();
+  //   //check unbonding
+  //   const unbondings =
+  //     await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
+  //       address: ADDRESS_ALICE,
+  //     });
+  //   const unbondingsTotal = unbondings.unbondings.reduce(
+  //     (acc, cur) => acc.plus(cur.amount.toString()),
+  //     new BigNumber(0)
+  //   );
+  //
+  //   // check if stake went though
+  //   expect(unbondingsTotal.toString()).toEqual(totalStaked.toString());
+  //   expect(pool.stakers).toHaveLength(1);
+  //   expect(stakersListResponse.stakers).toHaveLength(1);
+  //   expect(stakersListResponse.stakers[0].unbonding_amount).toEqual(
+  //     totalStaked.toString()
+  //   );
+  //   expect(pool.total_stake).toEqual(totalStaked.toString());
+  //   expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
+  //   // check if balance was  correct
+  //   expect(postBalance).toEqual(preBalance);
+  // });
+  //
+  // test("stake with multiple stakers", async () => {
+  //   // define amounts
+  //   const totalStaked = new BigNumber(100).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const aliceAmount = new BigNumber(200).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const bobAmount = new BigNumber(100).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const charlieAmount = new BigNumber(300).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //
+  //   // get default pool
+  //   let pool = await getDefaultPool();
+  //
+  //   // get stakers list
+  //   await sleep(3000)
+  //   let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
+  //     { pool_id: "0", status: 0 }
+  //   );
+  //
+  //   // check if staking amount is zero
+  //   expect(pool.stakers).toHaveLength(1);
+  //   expect(stakersListResponse.stakers).toHaveLength(1);
+  //   expect(pool.total_stake).toEqual(totalStaked.toString());
+  //
+  //   await alice.client.kyve.v1beta1.base.stakePool({
+  //     id: pool.id,
+  //     amount: aliceAmount.toString(),
+  //   }).then(tx => tx.execute());
+  //   await bob.client.kyve.v1beta1.base.stakePool({
+  //     id: pool.id,
+  //     amount: bobAmount.toString(),
+  //   }).then(tx => tx.execute());
+  //   await charlie.client.kyve.v1beta1.base.stakePool({
+  //     id: pool.id,
+  //     amount: charlieAmount.toString(),
+  //   }).then(tx => tx.execute());
+  //   // refetch pool
+  //   pool = await getDefaultPool();
+  //
+  //   // refetch stakers list
+  //   await sleep(3000)
+  //   stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
+  //     pool_id: "0",
+  //     status: 0,
+  //   });
+  //
+  //   // check if stake went though
+  //   expect(pool.stakers).toHaveLength(3);
+  //   expect(pool.stakers).toContain(ADDRESS_ALICE);
+  //   expect(pool.stakers).toContain(ADDRESS_BOB);
+  //   expect(pool.stakers).toContain(ADDRESS_CHARLIE);
+  //   expect(pool.lowest_staker).toBe(ADDRESS_BOB);
+  //
+  //   expect(stakersListResponse.stakers).toHaveLength(3);
+  //
+  //   expect(pool.total_stake).toEqual(
+  //     totalStaked
+  //       .plus(aliceAmount)
+  //       .plus(bobAmount)
+  //       .plus(charlieAmount)
+  //       .toString()
+  //   );
+  // });
+  //
+  // test("unstake with multiple stakers", async () => {
+  //   // define amounts
+  //   const totalStaked = new BigNumber(700).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const totalUnbonding = new BigNumber(100).multipliedBy(
+  //     10 ** constants.KYVE_DECIMALS
+  //   );
+  //   const aliceAmount = new BigNumber(200).multipliedBy(10 ** 9);
+  //   const bobAmount = new BigNumber(100).multipliedBy(10 ** 9);
+  //   const charlieAmount = new BigNumber(300).multipliedBy(10 ** 9);
+  //
+  //   // get default pool
+  //   let pool = await getDefaultPool();
+  //
+  //   // get stakers list
+  //   await sleep(3000)
+  //   let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
+  //     { pool_id: "0", status: 0 }
+  //   );
+  //
+  //   // check if staking amount is zero
+  //   expect(pool.stakers).toHaveLength(3);
+  //   expect(stakersListResponse.stakers).toHaveLength(3);
+  //   expect(pool.total_stake).toEqual(totalStaked.toString());
+  //
+  //   await alice.client.kyve.v1beta1.base.unstakePool({
+  //     id: pool.id,
+  //     amount: aliceAmount.toString(),
+  //   }).then(tx => tx.execute());
+  //   await bob.client.kyve.v1beta1.base.unstakePool({
+  //     id: pool.id,
+  //     amount: bobAmount.toString(),
+  //   }).then(tx => tx.execute());
+  //   await charlie.client.kyve.v1beta1.base.unstakePool({
+  //     id: pool.id,
+  //     amount: charlieAmount.toString(),
+  //   }).then(tx => tx.execute());
+  //
+  //   await sleep(10000);
+  //
+  //   // refetch pool
+  //   pool = await getDefaultPool();
+  //
+  //   // refetch stakers list
+  //   stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
+  //     pool_id: "0",
+  //     status: 0
+  //   });
+  //   const unbondingsAlice =
+  //     await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
+  //       address: ADDRESS_ALICE,
+  //     });
+  //   const unbondingsBob =
+  //     await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
+  //       address: ADDRESS_BOB,
+  //     });
+  //   const unbondingsCharlie =
+  //     await lcdClient.kyve.registry.v1beta1.accountStakingUnbonding({
+  //       address: ADDRESS_CHARLIE,
+  //     });
+  //   const unbondingsTotalAlice = unbondingsAlice.unbondings.reduce(
+  //     (acc, cur) => acc.plus(cur.amount.toString()),
+  //     new BigNumber(0)
+  //   );
+  //   const unbondingsTotalBob = unbondingsBob.unbondings.reduce(
+  //     (acc, cur) => acc.plus(cur.amount.toString()),
+  //     new BigNumber(0)
+  //   );
+  //   const unbondingsTotalCharlie = unbondingsCharlie.unbondings.reduce(
+  //     (acc, cur) => acc.plus(cur.amount.toString()),
+  //     new BigNumber(0)
+  //   );
+  //   expect(stakersListResponse.stakers).toHaveLength(3);
+  //
+  //   // check if stake went though
+  //   expect(pool.stakers).toHaveLength(3);
+  //   expect(pool.total_stake).toEqual(totalStaked.toString());
+  //   expect(unbondingsTotalAlice.toString()).toEqual(
+  //     totalUnbonding.plus(aliceAmount).toString()
+  //   );
+  //   expect(unbondingsTotalBob.toString()).toEqual(bobAmount.toString());
+  //   expect(unbondingsTotalCharlie.toString()).toEqual(charlieAmount.toString());
+  // });
 };

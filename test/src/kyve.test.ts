@@ -26,7 +26,7 @@ describe("chain", () => {
   });
 
   // funding
-  describe("Funding", funding);
+  // describe("Funding", funding);
   // staking
   describe("Staking", staking);
   // // delegation
