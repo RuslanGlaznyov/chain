@@ -42,7 +42,7 @@ export const delegation = () => {
 
     // get stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
 
     // check if staking amount is zero
@@ -69,7 +69,7 @@ export const delegation = () => {
     // refetch stakers list
     stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
-      status: 1
+      status: 0
     });
 
     // check if stake went though
@@ -92,7 +92,7 @@ export const delegation = () => {
 
     // get stakers list
     let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
-      { pool_id: "0", status: 1 }
+      { pool_id: "0", status: 0 }
     );
 
     const amount = new BigNumber(50).multipliedBy(10 ** 9);
