@@ -336,7 +336,7 @@ func (k Keeper) getVoteDistribution(ctx sdk.Context, pool *types.Pool) (valid ui
 	// get $KYVE voted for valid
 	for _, voter := range pool.BundleProposal.VotersValid {
 		staker, found := k.GetStaker(ctx, voter, pool.Id)
-		if found {
+		if found && staker.Status == types.STAKER_STATUS_ACTIVE {
 			valid += staker.Amount
 		}
 	}
@@ -344,7 +344,7 @@ func (k Keeper) getVoteDistribution(ctx sdk.Context, pool *types.Pool) (valid ui
 	// get $KYVE voted for invalid
 	for _, voter := range pool.BundleProposal.VotersInvalid {
 		staker, found := k.GetStaker(ctx, voter, pool.Id)
-		if found {
+		if found && staker.Status == types.STAKER_STATUS_ACTIVE {
 			invalid += staker.Amount
 		}
 	}
@@ -352,7 +352,7 @@ func (k Keeper) getVoteDistribution(ctx sdk.Context, pool *types.Pool) (valid ui
 	// get $KYVE voted for abstain
 	for _, voter := range pool.BundleProposal.VotersAbstain {
 		staker, found := k.GetStaker(ctx, voter, pool.Id)
-		if found {
+		if found && staker.Status == types.STAKER_STATUS_ACTIVE {
 			abstain += staker.Amount
 		}
 	}
