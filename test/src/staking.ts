@@ -97,7 +97,7 @@ export const staking = () => {
     let pool = await getDefaultPool();
 
     // get stakers list
-    let stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
+    const stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList(
       { pool_id: "0", status: 0}
     );
 
@@ -123,9 +123,9 @@ export const staking = () => {
     pool = await getDefaultPool();
     await sleep(50000)
     // refetch stakers list
-    stakersListResponse = await lcdClient.kyve.registry.v1beta1.stakersList({
+    const stakersListResponse2 = await lcdClient.kyve.registry.v1beta1.stakersList({
       pool_id: "0",
-      status: 2,
+      status: 0,
     });
 
     // get balance before staking
@@ -134,9 +134,9 @@ export const staking = () => {
     expect(pool.stakers).toHaveLength(1);
     expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
     expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
-    console.log('----------->', stakersListResponse);
-    expect(stakersListResponse.stakers).toHaveLength(1);
-    expect(stakersListResponse.stakers[0].amount).toEqual(amount.toString());
+    console.log('----------->', stakersListResponse2);
+    expect(stakersListResponse2.stakers).toHaveLength(1);
+    expect(stakersListResponse2.stakers[0].amount).toEqual(amount.toString());
     expect(pool.total_stake).toEqual(amount.toString());
 
     // check if balance was decreased correct
