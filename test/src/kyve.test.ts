@@ -16,7 +16,7 @@ describe("chain", () => {
       process.exit(1)
     }
     if(!startChain.isIgniteMod && !process.env.COSMOS_DATA?.length) {
-      console.error("COSMOS_BINARY doesn't set")
+      console.error("COSMOS_DATA doesn't set")
       process.exit(1)
     }
     await startChain();
