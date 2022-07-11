@@ -56,6 +56,7 @@ func (k msgServer) StakePool(goCtx context.Context, msg *types.MsgStakePool) (*t
 			PoolId:     msg.Id,
 			Amount:     msg.Amount,
 			Commission: types.DefaultCommission,
+			Status:     types.STAKER_STATUS_ACTIVE,
 		})
 	}
 
