@@ -1,13 +1,6 @@
 name: integtaion-tests
 
-on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - converted_to_draft
-      - edited
-
+on: pull_request
 jobs:
   tests:
     runs-on: ubuntu-latest
