@@ -43,6 +43,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdUndelegatePool())
 	cmd.AddCommand(CmdRedelegatePool())
 	cmd.AddCommand(CmdUpdateMetadata())
+	cmd.AddCommand(CmdUpdateCommission())
 
 	cmd.AddCommand(CmdSubmitCreatePoolProposal())
 	cmd.AddCommand(CmdSubmitUpdatePoolProposal())

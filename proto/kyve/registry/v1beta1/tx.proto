@@ -45,6 +45,8 @@ service Msg {
   rpc ClaimUploaderRole(MsgClaimUploaderRole) returns (MsgClaimUploaderRoleResponse);
   // UpdateMetadata ...
   rpc UpdateMetadata(MsgUpdateMetadata) returns (MsgUpdateMetadataResponse);
+  // UpdateCommission ...
+  rpc UpdateCommission(MsgUpdateCommission) returns (MsgUpdateCommissionResponse);
 }
 
 // (DE)FUNDING
@@ -254,15 +256,26 @@ message MsgUpdateMetadata {
   string creator = 1;
   // id ...
   uint64 id = 2;
-  // commission ...
-  string commission = 3;
   // moniker ...
-  string moniker = 4;
+  string moniker = 3;
   // website ...
-  string website = 5;
+  string website = 4;
   // logo
-  string logo = 6;
+  string logo = 5;
 }
 
 // MsgUpdateMetadataResponse defines the Msg/MsgUpdateMetadata response type.
 message MsgUpdateMetadataResponse {}
+
+// ...
+message MsgUpdateCommission {
+  // creator ...
+  string creator = 1;
+  // id ...
+  uint64 id = 2;
+  // commission ...
+  string commission = 3;
+}
+
+// ...
+message MsgUpdateCommissionResponse {}
