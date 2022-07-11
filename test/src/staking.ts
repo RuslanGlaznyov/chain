@@ -135,7 +135,7 @@ export const staking = () => {
     expect(pool.stakers).toHaveLength(1);
     expect(pool.stakers[0]).toEqual(ADDRESS_ALICE);
     expect(pool.lowest_staker).toBe(ADDRESS_ALICE);
-
+    console.log('----------->', stakersListResponse);
     expect(stakersListResponse.stakers).toHaveLength(1);
     expect(stakersListResponse.stakers[0].amount).toEqual(amount.toString());
     expect(pool.total_stake).toEqual(amount.toString());
