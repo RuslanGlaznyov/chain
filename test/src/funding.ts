@@ -7,7 +7,7 @@ import {
   bob,
   charlie,
 } from "./helpers/accounts";
-import { lcdClient, restartChain } from "./helpers/utils";
+import {lcdClient, restartChain, sleep} from "./helpers/utils";
 import { MAX_FUNDERS } from "./helpers/constants";
 import { constants } from "@kyve/sdk";
 
@@ -24,6 +24,7 @@ export const funding = () => {
     await alice.init();
     await bob.init();
     await charlie.init();
+    await sleep(5000)
   });
   jest.setTimeout(24 * 60 * 60 * 1000);
 

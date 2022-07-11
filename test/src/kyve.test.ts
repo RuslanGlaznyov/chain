@@ -30,7 +30,7 @@ describe("chain", () => {
   // staking
   describe("Staking", staking);
   // // delegation
-  describe("Delegation", delegation);
+  // describe("Delegation", delegation);
   afterAll(() => {
     // stop local chain
     global.chain.kill();
